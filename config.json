@@ -23,7 +23,7 @@
     },
 
     "basket": {
-        "path": "basket/fishes.sqlite3"
+        "path": "fishes.sqlite3"
     },
 
     "helper": {

@@ -6,9 +6,10 @@ import os.path
 import subprocess
 import sqlalchemy
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship, backref
 
 import pdb
 
@@ -31,6 +32,9 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     link = Column(String)
+    topic_id = Column(Integer, ForeignKey('topics.id'))
+
+    topic = relationship('Topic', backref=backref('user', order_by=id))
 
     def __repr__(self):
         return '<User(name="%s", link="%s")>' % (self.name, self.link)
@@ -41,6 +45,9 @@ class Weibo(Base):
 
     id = Column(Integer, primary_key=True)
     content = Column(String)
+    user_id = Column(Integer, ForeignKey('users.id'))
+
+    user = relationship('User', backref=backref('weibo', order_by=id))
 
     def _repr__(self):
         return '<Weibo(content="%s")>' % (self.content)

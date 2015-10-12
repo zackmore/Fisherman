@@ -7,8 +7,12 @@ import time
 import urllib
 import os.path
 import requests
-import sqlalchemy
+
 from bs4 import BeautifulSoup
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+from ..basket.basket import Topic, User, Weibo 
 
 import pdb
 
@@ -22,6 +26,11 @@ class TopicEater(object):
             self.token = config['pelican']['token'][0]
             self.entrance = config['pelican']['entrance']
             self.basket = config['basket']['path']
+
+        db_path = 'sqlite:///' + os.path.join('../basket',
+                                    config['basket']['path'])
+        engine = create_engine(db_path)
+        self.db = sessionmaker(bind=engine)
 
     def catch(self, topic):
         self.topic = urllib.quote_plus(topic)

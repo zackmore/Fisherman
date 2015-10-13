@@ -25,12 +25,10 @@ class TopicEater(object):
             config = json.load(config_file)
             self.token = config['pelican']['token'][0]
             self.entrance = config['pelican']['entrance']
-            self.basket = config['basket']['path']
-
-        db_path = 'sqlite:///' + os.path.join('../basket',
-                                    config['basket']['path'])
-        engine = create_engine(db_path)
-        self.db = sessionmaker(bind=engine)
+            db_path = config['basket']['path']
+            engine = create_engine(db_path)
+            Session = sessionmaker(bind=engine)
+            self.db = Session()
 
     def catch(self, topic):
         self.topic = urllib.quote_plus(topic)
@@ -55,8 +53,12 @@ class TopicEater(object):
                     continue
 
             # Processing all the pages
-            for page in xrange(1, self.pages + 1):
+            for page in xrange(1, self.pages):
+            #for page in xrange(1, 10):
+                print '=========='
+                print 'processing page %d' % page
                 self._page_process(page)
+                # TODO: time.sleep() randomly
 
     def _page_process(self, page_number):
         request_url = (self.entrance + config['pelican']['page_suffix']) % (
@@ -76,26 +78,44 @@ class TopicEater(object):
             weibos = [div for div in divs if re.search('M_', div.decode())]
             for weibo in weibos:
                 self._weibo_process(weibo)
-                # TODO: time.sleep() randomly
 
     def _weibo_process(self, weibo_tag):
         user = {}
         user['name'] = weibo_tag.find(class_='nk').text
         user['link'] = weibo_tag.find(class_='nk').get('href')
 
-        topics_links = []
+        topics = []
         weibo_content = weibo_tag.find(class_='ctt')
         links = weibo_content.find_all('a')
 
         if len(links) >= 1:
             for link in links:
                 if re.search(config['helper']['topic_character'], link.get('href')):
-                    if link.text not in topics_links:
-                        topics_links.append(link.text)
+                    if link.text not in topics:
+                        topics.append(link.text)
 
-        # TODO: save data
-        pdb.set_trace()
+        # save data
+        for topic in topics:
+            topic_instance = self.db.query(Topic).filter(Topic.name==topic).first()
+            if topic_instance:
+                data_topic = topic_instance
+            else:
+                data_topic = Topic(name=topic)
 
+            user_instance = self.db.query(User).filter(User.link==user['link']).first()
+            if user_instance:
+                data_user = user_instance
+            else:
+                data_user = User(name=user['name'], link=user['link'])
+
+            data_weibo = Weibo(content=weibo_content.text)
+            data_user.weibos.append(data_weibo)
+
+            data_topic.users.append(data_user)
+
+            #pdb.set_trace()
+            self.db.add(data_topic)
+            self.db.commit()
 
 
 if __name__ == '__main__':
@@ -108,4 +128,5 @@ if __name__ == '__main__':
         test_topic = '#晨间日记#'
         pelican = TopicEater()
         pelican.catch(test_topic)
+        pdb.set_trace()
         #pelican = TopicEater(config['pelican']['entrance'])

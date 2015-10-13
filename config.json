@@ -23,7 +23,7 @@
     },
 
     "basket": {
-        "path": "fishes.sqlite3"
+        "path": "sqlite:////Users/zack/Projects/Fisherman/fisherman/basket/fishes.sqlite3"
     },
 
     "helper": {

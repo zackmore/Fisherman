@@ -11,13 +11,14 @@ import os.path
 import requests
 
 from bottle import route, view, run, template, static_file
+from bottle import TEMPLATE_PATH
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from ..basket.basket import Topic, User, Weibo 
 
 
-# Global Variables
+# Global Variables and Bottle Settings
 config_path = os.path.join(os.path.dirname(__file__),
                             '../../config.json')
 with open(config_path) as config_file:
@@ -27,6 +28,8 @@ with open(config_path) as config_file:
     Session = sessionmaker(bind=engine)
 
     DB = Session()
+
+TEMPLATE_PATH.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'views')))
 
 
 # Static Resources
@@ -46,7 +49,7 @@ def dashboard():
 @route('/topics')
 @view('topics')
 def topics():
-    return dict(title='Topics')
+    return str(len(DB.query(Topic).all()))
 
 
 @route('/users')
@@ -55,10 +58,10 @@ def users():
     pass
 
 
-def main():
-    run(host='localhost', port=8080, reloader=True)
-
-
 # Run Server
+def run_server():
+    run()
+
+
 if __name__ == '__main__':
-    run(host='localhost', port=8080, reloader=True)
+    run_server()

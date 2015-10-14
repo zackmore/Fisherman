@@ -127,4 +127,3 @@ if __name__ == '__main__':
         test_topic = '#晨间日记#'
         pelican = TopicEater()
         pelican.catch(test_topic)
-        #pdb.set_trace()

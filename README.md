@@ -7,7 +7,8 @@ TODO:
 ## Pelican
 
 1. User filter (Android/iOS)
-2. Weibo number of single topic
+2. User Weibo ID
+3. Weibo number of single topic
 
 ## Deck
 

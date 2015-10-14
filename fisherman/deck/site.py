@@ -56,7 +56,7 @@ def topics():
 @route('/users')
 @view('users')
 def users():
-    pass
+    return dict(users=DB.query(User).all())
 
 
 # Run Server

@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/css/main.css">
+    <link rel="stylesheet" href="static/css/addon.css">
   </head>
   <body>
     <header id="header">
@@ -14,9 +15,9 @@
       <aside id="sidebar">
         <nav id="menu">
           <ul>
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Topics</a></li>
-            <li><a href="#">Users</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/topics">Topics</a></li>
+            <li><a href="/users">Users</a></li>
           </ul>
         </nav>
       </aside>

@@ -26,16 +26,17 @@ with open(config_path) as config_file:
     db_path = config['basket']['path']
     engine = create_engine(db_path)
     Session = sessionmaker(bind=engine)
-
     DB = Session()
 
-TEMPLATE_PATH.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'views')))
+TEMPLATE_PATH.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__),
+                        'views')))
 
 
 # Static Resources
-@route('/static/:filename#.*#')
+@route('/static/<filename:path>')
 def send_static(filename):
-    return static_file(filename, root='./static/')
+    return static_file(filename, root=os.path.join(os.path.dirname(__file__),
+                        'static/'))
 
 
 # Pages
@@ -49,7 +50,7 @@ def dashboard():
 @route('/topics')
 @view('topics')
 def topics():
-    return str(len(DB.query(Topic).all()))
+    return dict(topics=DB.query(Topic).all())
 
 
 @route('/users')

@@ -5,17 +5,21 @@
   <table class="table">
     <thead>
       <tr>
-        <th>hello</th>
-        <th>world</th>
-        <th>nice</th>
+        <th>ID</th>
+        <th>话题</th>
+        <th>状态(TODO)</th>
+        <th>操作</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>hello</td>
-        <td>hello</td>
-        <td>hello</td>
-      </tr>
+      % for topic in topics:
+        <tr>
+          <td>{{topic.id}}</td>
+          <td>{{topic.name}}</td>
+          <td></td>
+          <td></td>
+        </tr>
+      % end
     </tbody>
   </table>
 </div>

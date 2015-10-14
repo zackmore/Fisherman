@@ -1,0 +1,20 @@
+#main {
+    overflow: hidden;
+}
+
+#header {
+    position: fixed;
+    width: 100%;
+}
+
+#sidebar {
+    background: white;
+}
+
+#content {
+    margin-top: 60px; 
+}
+
+.container {
+    max-width: 100%;
+}

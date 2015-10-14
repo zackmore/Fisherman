@@ -113,7 +113,6 @@ class TopicEater(object):
 
             data_topic.users.append(data_user)
 
-            #pdb.set_trace()
             self.db.add(data_topic)
             self.db.commit()
 
@@ -128,5 +127,4 @@ if __name__ == '__main__':
         test_topic = '#晨间日记#'
         pelican = TopicEater()
         pelican.catch(test_topic)
-        pdb.set_trace()
-        #pelican = TopicEater(config['pelican']['entrance'])
+        #pdb.set_trace()

@@ -16,12 +16,13 @@
           <ul>
             <li><a href="#">Dashboard</a></li>
             <li><a href="#">Topics</a></li>
-            <li><a href="#">New fetch</a></li>
             <li><a href="#">Users</a></li>
           </ul>
         </nav>
       </aside>
-      <div id="content"></div>
+      <div id="content">
+        {{!base}}
+      </div>
     </main>
     <script src="static/js/main.js"></script>
   </body>

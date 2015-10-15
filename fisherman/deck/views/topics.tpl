@@ -2,7 +2,7 @@
 
 <div class="container">
   <h1>话题列表</h1>
-  <table class="table">
+  <table class="table table-hover">
     <thead>
       <tr>
         <th>ID</th>
@@ -17,7 +17,9 @@
           <td>{{topic.id}}</td>
           <td>{{topic.name}}</td>
           <td></td>
-          <td></td>
+          <td>
+            <a href="#" class="btn btn-xs btn-primary">Fetch</a>
+          </td>
         </tr>
       % end
     </tbody>

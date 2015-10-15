@@ -59,6 +59,12 @@ def users():
     return dict(users=DB.query(User).all())
 
 
+@route('/weibos')
+@view('weibos')
+def weibos():
+    return dict(weibos=DB.query(Weibo).all())
+
+
 # Run Server
 def run_server():
     run()

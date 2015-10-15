@@ -18,6 +18,7 @@
             <li><a href="/dashboard">Dashboard</a></li>
             <li><a href="/topics">Topics</a></li>
             <li><a href="/users">Users</a></li>
+            <li><a href="/weibos">Weibos</a></li>
           </ul>
         </nav>
       </aside>

@@ -6,7 +6,7 @@ TODO:
 
 ## Pelican
 
-0. last\_fetched\_date for Topic
+0. ~~last\_fetched\_date for Topic~~
 1. RepostEater
 2. User filter (Android/iOS)
 3. User Weibo ID

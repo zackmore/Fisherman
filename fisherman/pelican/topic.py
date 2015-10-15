@@ -7,6 +7,7 @@ import time
 import urllib
 import os.path
 import requests
+import datetime
 
 from bs4 import BeautifulSoup
 from sqlalchemy import create_engine
@@ -41,6 +42,7 @@ class TopicEater(object):
             sys.exit(1)
 
         if r.status_code == 200:
+            print 'ok'
             soup = BeautifulSoup(r.text, 'html.parser')
 
             # Get pages
@@ -53,12 +55,15 @@ class TopicEater(object):
                     continue
 
             # Processing all the pages
-            for page in xrange(1, self.pages):
-            #for page in xrange(1, 10):
+            #for page in xrange(1, self.pages):
+            for page in xrange(1, 2):
                 print '=========='
                 print 'processing page %d' % page
                 self._page_process(page)
                 # TODO: time.sleep() randomly
+        else:
+            print 'Could not login in'
+            sys.exit(1)
 
     def _page_process(self, page_number):
         request_url = (self.entrance + config['pelican']['page_suffix']) % (
@@ -66,8 +71,8 @@ class TopicEater(object):
 
         try:
             r = requests.get(request_url, headers=self.token)
-        except e:
-            print 'Network Error when requesting the %s:\n%s' % (request_url, e) 
+        except:
+            print 'Network Error when requesting the %s:\n%s' % (request_url) 
             sys.exit(1)
 
         if r.status_code == 200:
@@ -96,21 +101,30 @@ class TopicEater(object):
 
         # save data
         for topic in topics:
+            # Topic data
             topic_instance = self.db.query(Topic).filter(Topic.name==topic).first()
             if topic_instance:
                 data_topic = topic_instance
             else:
                 data_topic = Topic(name=topic)
 
+            # Update current topic last_fetched_at
+            if urllib.quote_plus(data_topic.name.encode('utf-8')) == self.topic:
+                now_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                data_topic.last_fetched_at = now_time
+
+            # User data
             user_instance = self.db.query(User).filter(User.link==user['link']).first()
             if user_instance:
                 data_user = user_instance
             else:
                 data_user = User(name=user['name'], link=user['link'])
 
+            # Weibo data
             data_weibo = Weibo(content=weibo_content.text)
-            data_user.weibos.append(data_weibo)
 
+            # Save
+            data_user.weibos.append(data_weibo)
             data_topic.users.append(data_user)
 
             self.db.add(data_topic)

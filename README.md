@@ -6,12 +6,21 @@ TODO:
 
 ## Pelican
 
-0. ~~last\_fetched\_date for Topic~~
-1. RepostEater
-2. User filter (Android/iOS)
-3. User Weibo ID
-4. Weibo number of single topic
-5. created\_date for Topic, User, Weibo
+### TopicEater
+
+0. ~~last\_fetched\_at for Topic~~
+2. ~~User filter (Agent: Android/iOS/Others)~~
+3. ~~User Weibo ID~~
+4. ~~Weibo number of single topic~~
+5. ~~created\_at for Topic, TopicUser, TopicWeibo~~
+
+### RepostEater
+
+TODO
+
+### FollowerEater
+
+TODO
 
 ## Deck
 

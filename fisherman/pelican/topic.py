@@ -37,8 +37,8 @@ class TopicEater(object):
 
         try:
             r = requests.get(request_url, headers=self.token)
-        except e:
-            print 'Network Error when requesting the %s:\n%s' % (request_url, e)
+        except:
+            print 'Network Error when requesting the %s' % request_url
             sys.exit(1)
 
         if r.status_code == 200:
@@ -54,9 +54,13 @@ class TopicEater(object):
                 else:
                     continue
 
+            # Get weibos_count
+            weibos_count_text = soup.find(class_='cmt').text
+            re_result = re.search('(?P<count>[0-9]+)', weibos_count_text)
+            self.weibos_count = int(re_result.group('count'))
+
             # Processing all the pages
-            #for page in xrange(1, self.pages):
-            for page in xrange(1, 2):
+            for page in xrange(1, self.pages):
                 print '=========='
                 print 'processing page %d' % page
                 self._page_process(page)
@@ -72,7 +76,7 @@ class TopicEater(object):
         try:
             r = requests.get(request_url, headers=self.token)
         except:
-            print 'Network Error when requesting the %s:\n%s' % (request_url) 
+            print 'Network Error when requesting the %s' % request_url
             sys.exit(1)
 
         if r.status_code == 200:
@@ -88,6 +92,13 @@ class TopicEater(object):
         user = {}
         user['name'] = weibo_tag.find(class_='nk').text
         user['link'] = weibo_tag.find(class_='nk').get('href')
+        come_from = weibo_tag.find(class_='ct').text
+        come_keyword = '来自'
+        start_point = come_from.find(come_keyword.decode('utf-8'))
+        user['agent'] = come_from[start_point+2:]
+        comment_link = weibo_tag.find(class_='cc').get('href')
+        re_result = re.search('uid=(?P<uid>[0-9]+)\&', comment_link)
+        user['weibo_id'] = int(re_result.group('uid'))
 
         topics = []
         weibo_content = weibo_tag.find(class_='ctt')
@@ -101,31 +112,38 @@ class TopicEater(object):
 
         # save data
         for topic in topics:
+            now_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
             # Topic data
             topic_instance = self.db.query(Topic).filter(Topic.name==topic).first()
             if topic_instance:
                 data_topic = topic_instance
             else:
                 data_topic = Topic(name=topic)
+                data_topic.created_at = now_time
 
-            # Update current topic last_fetched_at
+            # Update current topic last_fetched_at, weibos_count
             if urllib.quote_plus(data_topic.name.encode('utf-8')) == self.topic:
-                now_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 data_topic.last_fetched_at = now_time
+                data_topic.weibos_count = self.weibos_count
 
             # User data
             user_instance = self.db.query(User).filter(User.link==user['link']).first()
             if user_instance:
                 data_user = user_instance
             else:
-                data_user = User(name=user['name'], link=user['link'])
+                data_user = User(name=user['name'],
+                                link=user['link'],
+                                weibo_id=user['weibo_id'],
+                                agent=user['agent'],
+                                created_at=now_time)
 
             # Weibo data
-            data_weibo = Weibo(content=weibo_content.text)
+            data_weibo = Weibo(content=weibo_content.text, created_at=now_time)
 
             # Save
-            data_user.weibos.append(data_weibo)
-            data_topic.users.append(data_user)
+            data_user.topic_weibos.append(data_weibo)
+            data_topic.topic_users.append(data_user)
 
             self.db.add(data_topic)
             self.db.commit()

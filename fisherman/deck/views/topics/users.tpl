@@ -1,7 +1,7 @@
 % rebase('base.tpl')
 
 <div class="container">
-  <h1>用户列表</h1>
+  <h1>话题—用户列表</h1>
   <table class="table table-hover">
     <thead>
       <tr>

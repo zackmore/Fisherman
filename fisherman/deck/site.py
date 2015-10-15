@@ -15,7 +15,7 @@ from bottle import TEMPLATE_PATH
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from ..basket.basket import Topic, User, Weibo 
+from ..basket.basket import Topic, TopicUser, TopicWeibo 
 
 
 # Global Variables and Bottle Settings
@@ -48,21 +48,21 @@ def dashboard():
 
 
 @route('/topics')
-@view('topics')
+@view('topics/topics')
 def topics():
     return dict(topics=DB.query(Topic).all())
 
 
-@route('/users')
-@view('users')
+@route('/topics/users')
+@view('topics/users')
 def users():
-    return dict(users=DB.query(User).all())
+    return dict(users=DB.query(TopicUser).all())
 
 
-@route('/weibos')
-@view('weibos')
+@route('/topics/weibos')
+@view('topics/weibos')
 def weibos():
-    return dict(weibos=DB.query(Weibo).all())
+    return dict(weibos=DB.query(TopicWeibo).all())
 
 
 # Run Server

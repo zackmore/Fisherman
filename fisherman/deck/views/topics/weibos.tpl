@@ -1,7 +1,7 @@
 % rebase('base.tpl')
 
 <div class="container">
-  <h1>微博列表</h1>
+  <h1>话题—微博列表</h1>
   <table class="table table-hover">
     <thead>
       <tr>

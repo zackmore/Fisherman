@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from ..basket.basket import Topic, User, Weibo 
+from ..basket.basket import Topic, TopicUser, TopicWeibo 
 
 import pdb
 
@@ -25,7 +25,7 @@ class TopicEater(object):
         with open(config_path) as config_file:
             config = json.load(config_file)
             self.token = config['pelican']['token'][0]
-            self.entrance = config['pelican']['entrance']
+            self.entrance = config['pelican']['topic_entrance']
             db_path = config['basket']['path']
             engine = create_engine(db_path)
             Session = sessionmaker(bind=engine)
@@ -60,8 +60,8 @@ class TopicEater(object):
             self.weibos_count = int(re_result.group('count'))
 
             # Processing all the pages
-            for page in xrange(1, self.pages):
-                print '=========='
+            #for page in xrange(1, self.pages):
+            for page in xrange(1, 2):
                 print 'processing page %d' % page
                 self._page_process(page)
                 # TODO: time.sleep() randomly
@@ -70,7 +70,8 @@ class TopicEater(object):
             sys.exit(1)
 
     def _page_process(self, page_number):
-        request_url = (self.entrance + config['pelican']['page_suffix']) % (
+        request_url = (self.entrance +
+                        config['pelican']['topic_page_suffix']) % (
                         self.topic, page_number)
 
         try:
@@ -106,7 +107,8 @@ class TopicEater(object):
 
         if len(links) >= 1:
             for link in links:
-                if re.search(config['helper']['topic_character'], link.get('href')):
+                if re.search(config['helper']['topic_character'],
+                                link.get('href')):
                     if link.text not in topics:
                         topics.append(link.text)
 
@@ -115,7 +117,9 @@ class TopicEater(object):
             now_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
             # Topic data
-            topic_instance = self.db.query(Topic).filter(Topic.name==topic).first()
+            topic_instance = self.db.query(Topic).\
+                                filter(Topic.name==topic).\
+                                first()
             if topic_instance:
                 data_topic = topic_instance
             else:
@@ -128,18 +132,21 @@ class TopicEater(object):
                 data_topic.weibos_count = self.weibos_count
 
             # User data
-            user_instance = self.db.query(User).filter(User.link==user['link']).first()
+            user_instance = self.db.query(TopicUser).\
+                                filter(TopicUser.link==user['link']).\
+                                first()
             if user_instance:
                 data_user = user_instance
             else:
-                data_user = User(name=user['name'],
+                data_user = TopicUser(name=user['name'],
                                 link=user['link'],
                                 weibo_id=user['weibo_id'],
                                 agent=user['agent'],
                                 created_at=now_time)
 
             # Weibo data
-            data_weibo = Weibo(content=weibo_content.text, created_at=now_time)
+            data_weibo = TopicWeibo(content=weibo_content.text,
+                                    created_at=now_time)
 
             # Save
             data_user.topic_weibos.append(data_weibo)
@@ -154,7 +161,7 @@ if __name__ == '__main__':
 
     with open(config_path) as config_file:
         config = json.load(config_file)
-        entrance = config['pelican']['entrance']
+        entrance = config['pelican']['topic_entrance']
 
         test_topic = '#晨间日记#'
         pelican = TopicEater()

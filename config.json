@@ -4,8 +4,8 @@
     },
 
     "pelican": {
-        "entrance": "https://weibo.cn/search/mblog?keyword=%s",
-        "page_suffix": "&page=%d",
+        "topic_entrance": "https://weibo.cn/search/mblog?keyword=%s",
+        "topic_page_suffix": "&page=%d",
 
         "token": [
             {

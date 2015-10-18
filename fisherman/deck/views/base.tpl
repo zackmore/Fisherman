@@ -16,9 +16,13 @@
         <nav id="menu">
           <ul>
             <li><a href="/dashboard">Dashboard</a></li>
+            <li><hr></li>
             <li><a href="/topics">Topics</a></li>
             <li><a href="/topics/users">Topic Users</a></li>
             <li><a href="/topics/weibos">Topic Weibos</a></li>
+            <li><hr></li>
+            <li><a href="/reposts">Reposts</a></li>
+            <li><a href="/reposts/users">Repost Users</a></li>
           </ul>
         </nav>
       </aside>

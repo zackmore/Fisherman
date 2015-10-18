@@ -83,14 +83,20 @@ class RepostWeibo(Base):
     __table_args__ = {'sqlite_autoincrement': True}
 
     id = Column(Integer, primary_key=True)
+    base_url = Column(String)
     content = Column(String)
+    repost_count = Column(Integer)
     last_fetched_at = Column(String, default=None)
     created_at = Column(String)
 
     def __repr__(self):
         return '<RepostWeibo(content="%s",\
+                            base_url="%s",\
+                            repost_count="%s",\
                             last_fetched_at="%s")>' % (
                             self.content.encode('utf-8'),
+                            self.base_url,
+                            self.repost_count,
                             self.last_fetched_at)
 
 
@@ -104,7 +110,7 @@ class RepostUser(Base):
     link = Column(String)
     agent = Column(String)
     created_at = Column(String)
-    weibo_id = Column(Integer, ForeignKey('repost_weibos.id'))
+    repost_id = Column(Integer, ForeignKey('repost_weibos.id'))
 
     weibo = relationship('RepostWeibo',
                             backref=backref('repost_users', order_by=id))

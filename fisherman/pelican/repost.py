@@ -5,6 +5,7 @@ import sys
 import json
 import time
 import urllib
+import urlparse
 import os.path
 import requests
 import datetime
@@ -13,7 +14,7 @@ from bs4 import BeautifulSoup
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from ..basket.basket import Topic, User, Weibo 
+from ..basket.basket import RepostWeibo, RepostUser
 
 import pdb
 
@@ -25,155 +26,140 @@ class RepostEater(object):
         with open(config_path) as config_file:
             config = json.load(config_file)
             self.token = config['pelican']['token'][0]
-            self.entrance = config['pelican']['entrance']
             db_path = config['basket']['path']
             engine = create_engine(db_path)
             Session = sessionmaker(bind=engine)
             self.db = Session()
 
     def catch(self, url):
-        pass
+        base_url_o = urlparse.urlparse(url)
+        self.base_url = base_url_o[0] + '://' + base_url_o[1] + base_url_o[2]
 
+        try:
+            r = requests.get(self.base_url, headers=self.token)
+        except:
+            print 'Network Error when requesting the %s' % self.base_url
+            sys.exit(1)
 
-#class TopicEater(object):
-#    def __init__(self):
-#        config_path = os.path.join(os.path.dirname(__file__),
-#                                    '../../config.json')
-#        with open(config_path) as config_file:
-#            config = json.load(config_file)
-#            self.token = config['pelican']['token'][0]
-#            self.entrance = config['pelican']['entrance']
-#            db_path = config['basket']['path']
-#            engine = create_engine(db_path)
-#            Session = sessionmaker(bind=engine)
-#            self.db = Session()
-#
-#    def catch(self, topic):
-#        self.topic = urllib.quote_plus(topic)
-#        request_url = self.entrance % self.topic
-#
-#        try:
-#            r = requests.get(request_url, headers=self.token)
-#        except:
-#            print 'Network Error when requesting the %s' % request_url
-#            sys.exit(1)
-#
-#        if r.status_code == 200:
-#            print 'ok'
-#            soup = BeautifulSoup(r.text, 'html.parser')
-#
-#            # Get pages
-#            inputs = soup.find_all('input', type='hidden')
-#            for input in inputs:
-#                if re.search('mp', input.decode()):
-#                    self.pages = int(input.get('value'))
-#                    break
-#                else:
-#                    continue
-#
-#            # Get weibos_count
-#            weibos_count_text = soup.find(class_='cmt').text
-#            re_result = re.search('(?P<count>[0-9]+)', weibos_count_text)
-#            self.weibos_count = int(re_result.group('count'))
-#
-#            # Processing all the pages
-#            for page in xrange(1, self.pages):
-#                print '=========='
-#                print 'processing page %d' % page
-#                self._page_process(page)
-#                # TODO: time.sleep() randomly
-#        else:
-#            print 'Could not login in'
-#            sys.exit(1)
-#
-#    def _page_process(self, page_number):
-#        request_url = (self.entrance + config['pelican']['page_suffix']) % (
-#                        self.topic, page_number)
-#
-#        try:
-#            r = requests.get(request_url, headers=self.token)
-#        except:
-#            print 'Network Error when requesting the %s' % request_url
-#            sys.exit(1)
-#
-#        if r.status_code == 200:
-#            soup = BeautifulSoup(r.text, 'html.parser')
-#
-#            # Get all weibos
-#            divs = soup.find_all('div', class_='c')
-#            weibos = [div for div in divs if re.search('M_', div.decode())]
-#            for weibo in weibos:
-#                self._weibo_process(weibo)
-#
-#    def _weibo_process(self, weibo_tag):
-#        user = {}
-#        user['name'] = weibo_tag.find(class_='nk').text
-#        user['link'] = weibo_tag.find(class_='nk').get('href')
-#        come_from = weibo_tag.find(class_='ct').text
-#        come_keyword = '来自'
-#        start_point = come_from.find(come_keyword.decode('utf-8'))
-#        user['agent'] = come_from[start_point+2:]
-#        comment_link = weibo_tag.find(class_='cc').get('href')
-#        re_result = re.search('uid=(?P<uid>[0-9]+)\&', comment_link)
-#        user['weibo_id'] = int(re_result.group('uid'))
-#
-#        topics = []
-#        weibo_content = weibo_tag.find(class_='ctt')
-#        links = weibo_content.find_all('a')
-#
-#        if len(links) >= 1:
-#            for link in links:
-#                if re.search(config['helper']['topic_character'], link.get('href')):
-#                    if link.text not in topics:
-#                        topics.append(link.text)
-#
-#        # save data
-#        for topic in topics:
-#            now_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-#
-#            # Topic data
-#            topic_instance = self.db.query(Topic).filter(Topic.name==topic).first()
-#            if topic_instance:
-#                data_topic = topic_instance
-#            else:
-#                data_topic = Topic(name=topic)
-#                data_topic.created_at = now_time
-#
-#            # Update current topic last_fetched_at, weibos_count
-#            if urllib.quote_plus(data_topic.name.encode('utf-8')) == self.topic:
-#                data_topic.last_fetched_at = now_time
-#                data_topic.weibos_count = self.weibos_count
-#
-#            # User data
-#            user_instance = self.db.query(User).filter(User.link==user['link']).first()
-#            if user_instance:
-#                data_user = user_instance
-#            else:
-#                data_user = User(name=user['name'],
-#                                link=user['link'],
-#                                weibo_id=user['weibo_id'],
-#                                agent=user['agent'],
-#                                created_at=now_time)
-#
-#            # Weibo data
-#            data_weibo = Weibo(content=weibo_content.text, created_at=now_time)
-#
-#            # Save
-#            data_user.topic_weibos.append(data_weibo)
-#            data_topic.topic_users.append(data_user)
-#
-#            self.db.add(data_topic)
-#            self.db.commit()
+        if r.status_code == 200:
+            soup = BeautifulSoup(r.text, 'html.parser')
+
+            # Get content
+            self.content = soup.find(class_='ctt').text
+
+            # Get pages
+            inputs = soup.find_all('input', type='hidden')
+            for input in inputs:
+                if re.search('mp', input.decode()):
+                    self.pages = int(input.get('value'))
+                    break
+                else:
+                    continue
+
+            # Get repost count
+            repost_text = soup.find(id='rt').text
+            re_result = re.search('\[(?P<repost_count>[0-9]*)\]', repost_text)
+            self.repost_count = re_result.group('repost_count')
+
+            # Formating the RepostWeibo
+            repost_weibo_instance = self.db.query(RepostWeibo).\
+                                filter(RepostWeibo.base_url==self.base_url).\
+                                first()
+
+            now_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            if repost_weibo_instance:
+                self.repost_weibo = repost_weibo_instance
+                self.repost_weibo.last_fetched_at = now_time
+            else:
+                self.repost_weibo = RepostWeibo(base_url=self.base_url,
+                                                content=self.content,
+                                                repost_count=self.repost_count,
+                                                created_at=now_time,
+                                                last_fetched_at=now_time)
+
+            # Processing all the pages
+            for page in xrange(1, self.pages+1):
+                print 'processing page %s' % page
+                if not self._page_process(page):
+                    continue
+                # TODO: time.sleep() randomly
+        else:
+            print 'Could not login in'
+            sys.exit(1)
+
+    def _page_process(self, page):
+        request_url = self.base_url + '?&page=%s' % page
+
+        try:
+            r = requests.get(request_url, headers=self.token)
+        except:
+            print 'Network Error when requesting the %s' % request_url
+            return False
+
+        if r.status_code == 200:
+            print 'ok'
+            soup = BeautifulSoup(r.text, 'html.parser')
+
+            # Get all weibos
+            all_content_divs = soup.find_all('div', class_='c')
+            reposts = [div for div in all_content_divs\
+                            if div.find('span', class_='cc')]
+            for repost in reposts:
+                self._repost_process(repost)
+
+                # Save
+                self.db.add(self.repost_weibo)
+                self.db.commit()
+        else:
+            print 'Could not fetch url: %s' % request_url
+            return False
+
+    def _repost_process(self, repost):
+        user_tag = repost.find_all('a')[0]
+        now_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        user = {}
+        user['name'] = user_tag.text
+        user['link'] = user_tag.get('href')
+        come_from = repost.find(class_='ct').text
+        come_keyword = '来自'
+        start_point = come_from.find(come_keyword.decode('utf-8'))
+        user['agent'] = come_from[start_point+2:]
+        #####
+        re_result = re.search('/u/(?P<uid>[0-9]+)$', user['link'])
+        if re_result:
+            user['weibo_id'] = int(re_result.group('uid'))
+        else:
+            try:
+                r = requests.get('https://weibo.cn' + user['link'], headers=self.token)
+            except:
+                user['weibo_id'] = 0
+
+            if r.status_code == 200:
+                soup = BeautifulSoup(r.text, 'html.parser')
+                user_tag = soup.find('div', class_='u')
+                link = user_tag.find_all('a')[0].get('href')
+
+                re_result = re.search('/(?P<uid>[0-9]+)/', link)
+                if re_result:
+                    user['weibo_id'] = int(re_result.group('uid'))
+                else:
+                    user['weibo_id'] = 000
+            else:
+                user['weibo_id'] = 00
+
+        #####
+        user['created_at'] = now_time
+
+        self.repost_weibo.repost_users.append(RepostUser(
+                                                name=user['name'],
+                                                link=user['link'],
+                                                agent=user['agent'],
+                                                weibo_id=user['weibo_id'],
+                                                created_at=user['created_at']))
 
 
 if __name__ == '__main__':
-    pass
-    #config_path = os.path.join(os.path.dirname(__file__), '../../config.json')
-
-    #with open(config_path) as config_file:
-    #    config = json.load(config_file)
-    #    entrance = config['pelican']['entrance']
-
-    #    test_topic = '#晨间日记#'
-    #    pelican = TopicEater()
-    #    pelican.catch(test_topic)
+    url = 'https://weibo.cn/repost/CEF36dVY7?uid=1810274375&rl=0'
+    pelican = RepostEater()
+    pelican.catch(url)

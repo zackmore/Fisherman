@@ -42,7 +42,6 @@ class TopicEater(object):
             sys.exit(1)
 
         if r.status_code == 200:
-            print 'ok'
             soup = BeautifulSoup(r.text, 'html.parser')
 
             # Get pages
@@ -60,8 +59,7 @@ class TopicEater(object):
             self.weibos_count = int(re_result.group('count'))
 
             # Processing all the pages
-            #for page in xrange(1, self.pages):
-            for page in xrange(1, 2):
+            for page in xrange(1, self.pages+1):
                 print 'processing page %d' % page
                 self._page_process(page)
                 # TODO: time.sleep() randomly

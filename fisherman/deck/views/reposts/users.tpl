@@ -1,7 +1,7 @@
 % rebase('base.tpl')
 
 <div class="container">
-  <h1>话题—用户列表</h1>
+  <h1>转发—用户列表</h1>
   <table class="table table-hover">
     <thead>
       <tr>
@@ -9,7 +9,8 @@
         <th>Weibo ID</th>
         <th>名字</th>
         <th>个人微博主页</th>
-        <th>操作</th>
+        <th>来自于</th>
+        <th>创建于</th>
       </tr>
     </thead>
     <tbody>
@@ -19,7 +20,8 @@
           <td>{{user.weibo_id}}</td>
           <td>{{user.name}}</td>
           <td>{{user.link}}</td>
-          <td></td>
+          <td>{{user.agent}}</td>
+          <td>{{user.created_at}}</td>
         </tr>
       % end
     </tbody>

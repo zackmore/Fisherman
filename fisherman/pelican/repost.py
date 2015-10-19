@@ -9,6 +9,7 @@ import urlparse
 import os.path
 import requests
 import datetime
+import random
 
 from bs4 import BeautifulSoup
 from sqlalchemy import create_engine
@@ -82,7 +83,7 @@ class RepostEater(object):
                 print 'processing page %s' % page
                 if not self._page_process(page):
                     continue
-                # TODO: time.sleep() randomly
+                time.sleep(random.randint(1, 10))
         else:
             print 'Could not login in'
             sys.exit(1)

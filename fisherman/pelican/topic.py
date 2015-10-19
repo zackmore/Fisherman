@@ -8,6 +8,7 @@ import urllib
 import os.path
 import requests
 import datetime
+import random
 
 from bs4 import BeautifulSoup
 from sqlalchemy import create_engine
@@ -62,7 +63,8 @@ class TopicEater(object):
             for page in xrange(1, self.pages+1):
                 print 'processing page %d' % page
                 self._page_process(page)
-                # TODO: time.sleep() randomly
+                #time.sleep(random.randint(1, 10))
+                time.sleep(random.randint(1, 3))
         else:
             print 'Could not login in'
             sys.exit(1)
@@ -76,7 +78,7 @@ class TopicEater(object):
             r = requests.get(request_url, headers=self.token)
         except:
             print 'Network Error when requesting the %s' % request_url
-            sys.exit(1)
+            return False
 
         if r.status_code == 200:
             soup = BeautifulSoup(r.text, 'html.parser')
@@ -95,9 +97,12 @@ class TopicEater(object):
         come_keyword = '来自'
         start_point = come_from.find(come_keyword.decode('utf-8'))
         user['agent'] = come_from[start_point+2:]
-        comment_link = weibo_tag.find(class_='cc').get('href')
+        comment_link = weibo_tag.find_all(class_='cc')[-1].get('href')
         re_result = re.search('uid=(?P<uid>[0-9]+)\&', comment_link)
-        user['weibo_id'] = int(re_result.group('uid'))
+        if re_result:
+            user['weibo_id'] = int(re_result.group('uid'))
+        else:
+            user['weibo_id'] = 0
 
         topics = []
         weibo_content = weibo_tag.find(class_='ctt')

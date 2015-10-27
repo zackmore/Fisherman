@@ -1,6 +1,7 @@
 {
     "deck": {
-        "port": "8088"
+        "port": "8088",
+        "item_per_page": "50"
     },
 
     "pelican": {

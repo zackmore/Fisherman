@@ -134,14 +134,14 @@ def reposts(page=0):
 
 
 @route('/reposts/users')
-@route('/reposts/users/<page:init')
+@route('/reposts/users/<page:int>')
 @view('reposts/users')
 def repostUsers(page=0):
     resource = Helper.generate_listpage_resource(RepostUser, page)
     pagination = Helper.generate_pagination(DB.query(RepostUser).count(),
                                                     page,
                                                     '/reposts/users')
-    return dict(reposts=resource, pagination=pagination)
+    return dict(users=resource, pagination=pagination)
 
 
 # Run Server

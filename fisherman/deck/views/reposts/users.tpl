@@ -26,4 +26,7 @@
       % end
     </tbody>
   </table>
+  <div class="row">
+    % include('pagination.tpl', pagination=pagination)
+  </div>
 </div>

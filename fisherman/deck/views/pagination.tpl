@@ -11,7 +11,7 @@
         % if pagination['has_next']:
         <li>
           <a href="{{pagination['next']}}" aria-label="Next">
-            <span aria-hidden="true">&raquo; 下一页</span>
+            <span aria-hidden="true">下一页 &raquo;</span>
           </a>
         </li>
         % end

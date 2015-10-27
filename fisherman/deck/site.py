@@ -42,7 +42,19 @@ class Helper(object):
         pass
 
     @staticmethod
-    def generate_listpage_resource(resource, current_page):
+    def _get_resource_query(resource, search_column):
+        search_keyword = request.query.get('keyword')
+        if search_keyword:
+            search_keyword = request.query.get('keyword').decode('utf-8')
+            q = DB.query(resource).\
+                filter(getattr(resource, search_column).\
+                        contains(search_keyword))
+        else:
+            q = DB.query(resource)
+        return q
+
+    @staticmethod
+    def _paginating_query(q, current_page):
         item_per_page = int(config['deck']['item_per_page'])
         if current_page == 0 or current_page == 1:
             start = 0
@@ -50,26 +62,36 @@ class Helper(object):
         else:
             start = item_per_page * current_page
             end = start + item_per_page
-        q = DB.query(resource).slice(start, end)
-
-        return q
+        return q.slice(start, end)
 
     @staticmethod
-    def generate_pagination(all_count, current_page, query_url):
-        rtn = {}
+    def _get_pagination(all_count, current_page, query_url):
+        pagination = {}
 
         item_per_page = int(config['deck']['item_per_page'])
-        rtn['pages'] = all_count / item_per_page + 1
-        rtn['prev'] = query_url + '/' + str(current_page - 1)
-        rtn['next'] = query_url + '/' + str(current_page + 1)
-        rtn['has_prev'] = True
-        rtn['has_next'] = True
+        pagination['pages'] = all_count / item_per_page + 1
+        pagination['prev'] = query_url + '/' + str(current_page - 1)
+        pagination['next'] = query_url + '/' + str(current_page + 1)
+        pagination['has_prev'] = True
+        pagination['has_next'] = True
         if current_page == 0 or current_page == 1:
-            rtn['has_prev'] = False
-        if current_page == rtn['pages'] - 1:
-            rtn['has_next'] = False
+            pagination['has_prev'] = False
+        if current_page == pagination['pages'] - 1:
+            pagination['has_next'] = False
+        return pagination
 
-        return rtn
+    @staticmethod
+    def generate_listpage_resource(resource,
+                                    current_page,
+                                    search_column,
+                                    query_url):
+        q = Helper._get_resource_query(resource, search_column)
+        all_count = q.count()
+
+        resource = Helper._paginating_query(q, current_page)
+        pagination = Helper._get_pagination(all_count, current_page, query_url)
+
+        return dict(resource=resource, pagination=pagination)
 
 
 # Static Resources
@@ -93,55 +115,55 @@ def dashboard():
 @route('/topics/<page:int>')
 @view('topics/topics')
 def topics(page=0):
-    resource = Helper.generate_listpage_resource(Topic, page)
-    pagination = Helper.generate_pagination(DB.query(Topic).count(),
+    rtn = Helper.generate_listpage_resource(Topic,
                                             page,
+                                            'name',
                                             '/topics')
-    return dict(topics=resource, pagination=pagination)
+    return dict(topics=rtn['resource'], pagination=rtn['pagination'])
 
 
 @route('/topics/users')
 @route('/topics/users/<page:int>')
 @view('topics/users')
 def topicUsers(page=0):
-    resource = Helper.generate_listpage_resource(TopicUser, page)
-    pagination = Helper.generate_pagination(DB.query(TopicUser).count(),
-                                                    page,
-                                                    '/topics/users')
-    return dict(users=resource, pagination=pagination)
+    rtn = Helper.generate_listpage_resource(TopicUser,
+                                            page,
+                                            'name',
+                                            '/topics/users')
+    return dict(users=rtn['resource'], pagination=rtn['pagination'])
 
 
 @route('/topics/weibos')
 @route('/topics/weibos/<page:int>')
 @view('topics/weibos')
 def topicWeibos(page=0):
-    resource = Helper.generate_listpage_resource(TopicWeibo, page)
-    pagination = Helper.generate_pagination(DB.query(TopicWeibo).count(),
-                                                    page,
-                                                    '/topics/weibos')
-    return dict(weibos=resource, pagination=pagination)
+    rtn = Helper.generate_listpage_resource(TopicWeibo,
+                                            page,
+                                            'content',
+                                            '/topics/weibos')
+    return dict(weibos=rtn['resource'], pagination=rtn['pagination'])
 
 
 @route('/reposts')
 @route('/reposts/<page:int>')
 @view('reposts/reposts')
 def reposts(page=0):
-    resource = Helper.generate_listpage_resource(RepostWeibo, page)
-    pagination = Helper.generate_pagination(DB.query(RepostWeibo).count(),
-                                                    page,
-                                                    '/reposts')
-    return dict(reposts=resource, pagination=pagination)
+    rtn = Helper.generate_listpage_resource(RepostWeibo,
+                                            page,
+                                            'content',
+                                            '/reposts')
+    return dict(reposts=rtn['resource'], pagination=rtn['pagination'])
 
 
 @route('/reposts/users')
 @route('/reposts/users/<page:int>')
 @view('reposts/users')
 def repostUsers(page=0):
-    resource = Helper.generate_listpage_resource(RepostUser, page)
-    pagination = Helper.generate_pagination(DB.query(RepostUser).count(),
-                                                    page,
-                                                    '/reposts/users')
-    return dict(users=resource, pagination=pagination)
+    rtn = Helper.generate_listpage_resource(RepostUser,
+                                            page,
+                                            'name',
+                                            '/reposts/users')
+    return dict(users=rtn['resource'], pagination=rtn['pagination'])
 
 
 # Run Server

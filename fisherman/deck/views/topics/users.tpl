@@ -1,7 +1,12 @@
 % rebase('base.tpl')
 
 <div class="container">
-  <h1>话题—用户列表</h1>
+  <div class="row">
+    <h1 class="pull-left">话题—用户列表</h1>
+    <div class="pull-right">
+      % include('searchform.tpl')
+    </div>
+  </div>
   <table class="table table-hover">
     <thead>
       <tr>

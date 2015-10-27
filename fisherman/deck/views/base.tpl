@@ -15,14 +15,17 @@
       <aside id="sidebar">
         <nav id="menu">
           <ul>
-            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/dashboard">首页</a></li>
             <li><hr></li>
-            <li><a href="/topics">Topics</a></li>
-            <li><a href="/topics/users">Topic Users</a></li>
-            <li><a href="/topics/weibos">Topic Weibos</a></li>
+            <li><a href="/topics">话题</a></li>
+            <li><a href="/topics/users">参与话题的用户</a></li>
+            <li><a href="/topics/weibos">话题的相关微博</a></li>
             <li><hr></li>
-            <li><a href="/reposts">Reposts</a></li>
-            <li><a href="/reposts/users">Repost Users</a></li>
+            <li><a href="/reposts">被转发的微博</a></li>
+            <li><a href="/reposts/users">参与转发的用户</a></li>
+            <li><hr></li>
+            <li><a href="/bigv">大V</a></li>
+            <li><a href="/bigv/followers">大V 粉丝</a></li>
           </ul>
         </nav>
       </aside>
@@ -30,6 +33,5 @@
         {{!base}}
       </div>
     </main>
-    <script src="static/js/main.js"></script>
   </body>
 </html>

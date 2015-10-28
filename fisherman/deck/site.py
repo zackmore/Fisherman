@@ -45,7 +45,7 @@ class Helper(object):
     def _get_resource_query(resource, search_column):
         search_keyword = request.query.get('keyword')
         if search_keyword:
-            search_keyword = request.query.get('keyword').decode('utf-8')
+            search_keyword = request.query.get('keyword').strip().decode('utf-8')
             q = DB.query(resource).\
                 filter(getattr(resource, search_column).\
                         contains(search_keyword))

@@ -24,8 +24,8 @@
             <li><a href="/reposts">被转发的微博</a></li>
             <li><a href="/reposts/users">参与转发的用户</a></li>
             <li><hr></li>
-            <li><a href="/bigv">大V</a></li>
-            <li><a href="/bigv/followers">大V 粉丝</a></li>
+            <li><a href="/bigvs">大V</a></li>
+            <li><a href="/bigvs/followers">大V 粉丝</a></li>
           </ul>
         </nav>
       </aside>

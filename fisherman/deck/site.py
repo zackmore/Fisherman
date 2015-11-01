@@ -19,7 +19,9 @@ from ..basket.basket import Topic,\
                             TopicUser,\
                             TopicWeibo,\
                             RepostWeibo,\
-                            RepostUser
+                            RepostUser,\
+                            BigV,\
+                            BigVFollower
 
 
 # Global Variables, Bottle Settings, Helpers
@@ -164,6 +166,28 @@ def repostUsers(page=0):
                                             'name',
                                             '/reposts/users')
     return dict(users=rtn['resource'], pagination=rtn['pagination'])
+
+
+@route('/bigvs')
+@route('/bigvs/<page:int>')
+@view('bigvs/bigvs')
+def bigvs(page=0):
+    rtn = Helper.generate_listpage_resource(BigV,
+                                            page,
+                                            'name',
+                                            '/bigvs')
+    return dict(bigvs=rtn['resource'], pagination=rtn['pagination'])
+
+
+@route('/bigvs/followers')
+@route('/bigvs/followers/<page:int>')
+@view('bigvs/followers')
+def bigvs(page=0):
+    rtn = Helper.generate_listpage_resource(BigVFollower,
+                                            page,
+                                            'name',
+                                            '/bigvs/followers')
+    return dict(followers=rtn['resource'], pagination=rtn['pagination'])
 
 
 # Run Server

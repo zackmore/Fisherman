@@ -89,7 +89,7 @@ class FollowerEater(object):
                 print 'processing page %s' % page
                 if not self._process_page(page):
                     continue
-                #time.sleep(random.randint(1, 10))
+                time.sleep(random.randint(1, 3))
         else:
             print 'Could not login in'
             sys.exit(1)

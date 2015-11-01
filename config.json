@@ -8,6 +8,9 @@
         "topic_entrance": "https://weibo.cn/search/mblog?keyword=%s",
         "topic_page_suffix": "&page=%d",
 
+        "follower_entrace": "https://weibo.cn/%s/fans?page=%s",
+        "follower_link": "https://weibo.cn/u/%s",
+
         "token": [
             {
                 "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
@@ -15,10 +18,10 @@
                 "Accept-Language":"en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4,nl;q=0.2,zh-TW;q=0.2,nb;q=0.2",
                 "Cache-Control":"max-age=0",
                 "Connection":"keep-alive",
-                "Cookie":"_T_WM=effe8520f6c96cd9b2a0cf3c75accc62; SUB=_2A257J2A4DeTxGeRP6lMZ9ivEzDyIHXVY6ABwrDV6PUJbrdAKLXbBkW1v2jSfryOVt5P9LoExX8ZZnjYKyQ..; gsid_CTandWM=4u4357b01ZTiCEy9dKzZP8Role2; M_WEIBOCN_PARAMS=uicode%3D20000174",
+                "Cookie":"_T_WM=8684101799989019724755eea13e3e4b; SUB=_2A257Md6SDeTxGeRP6lMZ9ivEzDyIHXVY3eLarDV6PUJbrdAKLVikkW0urCnH8luuYjXhgMHofJbzuJGfKg..; gsid_CTandWM=4uMY9b801fv7Ti4Guyzon8Role2",
                 "Host":"weibo.cn",
                 "Upgrade-Insecure-Requests":"1",
-                "User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36"
+                "User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36"
             }
         ]
     },

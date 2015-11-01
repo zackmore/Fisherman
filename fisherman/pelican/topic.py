@@ -167,5 +167,6 @@ if __name__ == '__main__':
         entrance = config['pelican']['topic_entrance']
 
         test_topic = '#晨间日记#'
+        #test_topic = '#日记#'
         pelican = TopicEater()
         pelican.catch(test_topic)

@@ -18,14 +18,14 @@ Base = declarative_base()
 
 # Topic Related
 class Topic(Base):
-    __tablename__ = 'topics'
-    __table_args__ = {'sqlite_autoincrement': True}
+    __tablename__   = 'topics'
+    __table_args__  = {'sqlite_autoincrement': True}
 
-    id = Column(Integer, primary_key=True)
+    id              = Column(Integer, primary_key=True)
     last_fetched_at = Column(String, default=None)
-    name = Column(String)
-    weibos_count = Column(Integer)
-    created_at = Column(String)
+    name            = Column(String)
+    weibos_count    = Column(Integer)
+    created_at      = Column(String)
 
     def __repr__(self):
         return '<Topic(name="%s",\
@@ -37,16 +37,16 @@ class Topic(Base):
 
 
 class TopicUser(Base):
-    __tablename__ = 'topic_users'
-    __table_args__ = {'sqlite_autoincrement': True}
+    __tablename__   = 'topic_users'
+    __table_args__  = {'sqlite_autoincrement': True}
 
-    id = Column(Integer, primary_key=True)
-    weibo_id = Column(Integer)
-    name = Column(String)
-    link = Column(String)
-    agent = Column(String)
-    created_at = Column(String)
-    topic_id = Column(Integer, ForeignKey('topics.id'))
+    id              = Column(Integer, primary_key=True)
+    weibo_id        = Column(Integer)
+    name            = Column(String)
+    link            = Column(String)
+    agent           = Column(String)
+    created_at      = Column(String)
+    topic_id        = Column(Integer, ForeignKey('topics.id'))
 
     topic = relationship('Topic', backref=backref('topic_users', order_by=id))
 
@@ -62,13 +62,13 @@ class TopicUser(Base):
 
 
 class TopicWeibo(Base):
-    __tablename__ = 'topic_weibos'
-    __table_args__ = {'sqlite_autoincrement': True}
+    __tablename__   = 'topic_weibos'
+    __table_args__  = {'sqlite_autoincrement': True}
 
-    id = Column(Integer, primary_key=True)
-    content = Column(String)
-    created_at = Column(String)
-    user_id = Column(Integer, ForeignKey('topic_users.id'))
+    id              = Column(Integer, primary_key=True)
+    content         = Column(String)
+    created_at      = Column(String)
+    user_id         = Column(Integer, ForeignKey('topic_users.id'))
 
     user = relationship('TopicUser',
                         backref=backref('topic_weibos', order_by=id))
@@ -79,15 +79,15 @@ class TopicWeibo(Base):
 
 # Repost Related
 class RepostWeibo(Base):
-    __tablename__ = 'repost_weibos'
-    __table_args__ = {'sqlite_autoincrement': True}
+    __tablename__   = 'repost_weibos'
+    __table_args__  = {'sqlite_autoincrement': True}
 
-    id = Column(Integer, primary_key=True)
-    base_url = Column(String)
-    content = Column(String)
-    repost_count = Column(Integer)
+    id              = Column(Integer, primary_key=True)
+    base_url        = Column(String)
+    content         = Column(String)
+    repost_count    = Column(Integer)
     last_fetched_at = Column(String, default=None)
-    created_at = Column(String)
+    created_at      = Column(String)
 
     def __repr__(self):
         return '<RepostWeibo(content="%s",\
@@ -101,16 +101,16 @@ class RepostWeibo(Base):
 
 
 class RepostUser(Base):
-    __tablename__ = 'repost_users'
-    __table_args__ = {'sqlite_autoincrement': True}
+    __tablename__   = 'repost_users'
+    __table_args__  = {'sqlite_autoincrement': True}
 
-    id = Column(Integer, primary_key=True)
-    weibo_id = Column(Integer)
-    name = Column(String)
-    link = Column(String)
-    agent = Column(String)
-    created_at = Column(String)
-    repost_id = Column(Integer, ForeignKey('repost_weibos.id'))
+    id              = Column(Integer, primary_key=True)
+    weibo_id        = Column(Integer)
+    name            = Column(String)
+    link            = Column(String)
+    agent           = Column(String)
+    created_at      = Column(String)
+    repost_id       = Column(Integer, ForeignKey('repost_weibos.id'))
 
     weibo = relationship('RepostWeibo',
                             backref=backref('repost_users', order_by=id))
@@ -124,6 +124,52 @@ class RepostUser(Base):
                             self.weibo_id,
                             self.link,
                             self.agent.encode('utf-8'))
+
+
+# Follower Related
+class BigV(Base):
+    __tablename__   = 'bigvs'
+    __table_args__  = {'sqlite_autoincrement': True}
+
+    id              = Column(Integer, primary_key=True)
+    weibo_id        = Column(Integer)
+    name            = Column(String)
+    link            = Column(String)
+    created_at      = Column(String)
+    last_fetched_at = Column(String, default=None)
+
+    def __repr__(self):
+        return '<BigV(name="%s",\
+                        weibo_id="%s",\
+                        link="%s"' % (
+                        self.name.encode('utf-8'),
+                        self.weibo_id,
+                        self.link)
+
+
+class BigVFollower(Base):
+    __tablename__   = 'bigv_followers'
+    __table_args__  = {'sqlite_autoincrement': True}
+
+    id              = Column(Integer, primary_key=True)
+    weibo_id        = Column(Integer)
+    name            = Column(String)
+    link            = Column(String)
+    created_at      = Column(String)
+    bigv_id         = Column(Integer, ForeignKey('bigvs.id'))
+
+    bigv = relationship('BigV', backref=backref('bigv_followers', order_by=id))
+
+    def __repr__(self):
+        return '<BigVFollower(name="%s",\
+                                weibo_id="%s",\
+                                link="%s",\
+                                bigv="%s")>' % (
+                                self.name.encode('utf-8'),
+                                self.weibo_id,
+                                self.link,
+                                self.bigv.name.encode('utf-8'))
+
 
 
 if __name__ == '__main__':

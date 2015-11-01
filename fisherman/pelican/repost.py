@@ -126,13 +126,13 @@ class RepostEater(object):
         come_keyword = '来自'
         start_point = come_from.find(come_keyword.decode('utf-8'))
         user['agent'] = come_from[start_point+2:]
-        #####
         re_result = re.search('/u/(?P<uid>[0-9]+)$', user['link'])
         if re_result:
             user['weibo_id'] = int(re_result.group('uid'))
         else:
             try:
-                r = requests.get('https://weibo.cn' + user['link'], headers=self.token)
+                r = requests.get('https://weibo.cn' + user['link'],
+                                    headers=self.token)
             except:
                 user['weibo_id'] = 0
 

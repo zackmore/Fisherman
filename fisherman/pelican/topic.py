@@ -78,7 +78,7 @@ class TopicEater(object):
         try:
             r = requests.get(request_url, headers=self.token)
         except:
-            print 'Network Error when requesting the %s' % request_url
+            #print 'Network Error when requesting the %s' % request_url
             return False
 
         if r.status_code == 200:
@@ -156,21 +156,16 @@ class TopicEater(object):
             data_user.topic_weibos.append(data_weibo)
             data_topic.topic_users.append(data_user)
 
-            print data_topic
-
-            #self.db.add(data_topic)
-            #self.db.commit()
+            self.db.add(data_topic)
+            self.db.commit()
 
 
 if __name__ == '__main__':
-    onfig_path = os.path.join(os.path.dirname(__file__), '../../config.json')
+    config_path = os.path.join(os.path.dirname(__file__), '../../config.json')
 
     with open(config_path) as config_file:
         config = json.load(config_file)
         entrance = config['pelican']['topic_entrance']
-
-        #test_topic = u'#晨间日记#'
-        #test_topic = '#日记#'
         test_topic = u'#转发视奸#'
         pelican = TopicEater()
         pelican.catch(test_topic)

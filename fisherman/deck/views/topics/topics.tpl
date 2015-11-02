@@ -25,7 +25,7 @@
           <td>{{topic.last_fetched_at}}</td>
           <td>{{topic.created_at}}</td>
           <td>
-            <a href="/fetch/topic/{{topic.id}}" class="btn btn-xs btn-primary">Fetch</a>
+            <a href="/fetch/topic/{{topic.id}}" class="btn btn-xs btn-primary fetch-topic">Fetch</a>
           </td>
         </tr>
       % end

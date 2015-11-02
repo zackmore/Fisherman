@@ -1,6 +1,6 @@
 <div class="col-xs-12">
     <nav>
-      <ul class="pagination">
+      <ul class="pagination pull-left">
         % if pagination['has_prev']:
         <li>
           <a href="{{pagination['prev']}}" aria-label="Previous">
@@ -16,5 +16,6 @@
         </li>
         % end
       </ul>
+      <div class="pagination-number">{{pagination['current']}} / {{pagination['pages']}}</div>
     </nav>
 </div>

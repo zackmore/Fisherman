@@ -18,3 +18,13 @@
 .container {
     max-width: 100%;
 }
+
+.pagination {
+    margin: 0;
+}
+
+.pagination-number {
+    line-height: 34px;
+    float: left;
+    margin-left: 10px;
+}

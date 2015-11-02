@@ -33,5 +33,8 @@
         {{!base}}
       </div>
     </main>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/main.js"></script>
   </body>
 </html>

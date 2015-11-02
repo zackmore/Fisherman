@@ -9,9 +9,11 @@ import time
 import urllib
 import os.path
 import requests
+import subprocess
 
-from bottle import route, view, run, template, static_file, request
+from bottle import view, run, template, static_file, request
 from bottle import TEMPLATE_PATH
+from bottle import route, post, get
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -22,6 +24,10 @@ from ..basket.basket import Topic,\
                             RepostUser,\
                             BigV,\
                             BigVFollower
+
+from ..pelican.follower import FollowerEater
+from ..pelican.repost import RepostEater
+from ..pelican.topic import TopicEater
 
 
 # Global Variables, Bottle Settings, Helpers
@@ -188,6 +194,17 @@ def bigvs(page=0):
                                             'name',
                                             '/bigvs/followers')
     return dict(followers=rtn['resource'], pagination=rtn['pagination'])
+
+
+# Subprocess
+################################################
+@get('/fetch/topic/<topic_id:int>')
+def fetch_topic(topic_id):
+    #return {'topic': topic}
+    topic = DB.query(Topic).filter_by(id=topic_id).first()
+
+    pelican = TopicEater()
+    pelican.catch(topic.name)
 
 
 # Run Server

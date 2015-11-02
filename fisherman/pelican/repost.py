@@ -25,9 +25,9 @@ class RepostEater(object):
         config_path = os.path.join(os.path.dirname(__file__),
                                     '../../config.json')
         with open(config_path) as config_file:
-            config = json.load(config_file)
-            self.token = config['pelican']['token'][0]
-            db_path = config['basket']['path']
+            self.config = json.load(config_file)
+            self.token = self.config['pelican']['token'][0]
+            db_path = self.config['basket']['path']
             engine = create_engine(db_path)
             Session = sessionmaker(bind=engine)
             self.db = Session()

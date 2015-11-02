@@ -24,16 +24,16 @@ class TopicEater(object):
         config_path = os.path.join(os.path.dirname(__file__),
                                     '../../config.json')
         with open(config_path) as config_file:
-            config = json.load(config_file)
-            self.token = config['pelican']['token'][0]
-            self.entrance = config['pelican']['topic_entrance']
-            db_path = config['basket']['path']
+            self.config = json.load(config_file)
+            self.token = self.config['pelican']['token'][0]
+            self.entrance = self.config['pelican']['topic_entrance']
+            db_path = self.config['basket']['path']
             engine = create_engine(db_path)
             Session = sessionmaker(bind=engine)
             self.db = Session()
 
     def catch(self, topic):
-        self.topic = urllib.quote_plus(topic)
+        self.topic = urllib.quote_plus(topic.encode('utf-8'))
         request_url = self.entrance % self.topic
 
         try:
@@ -71,7 +71,7 @@ class TopicEater(object):
 
     def _page_process(self, page_number):
         request_url = (self.entrance +
-                        config['pelican']['topic_page_suffix']) % (
+                        self.config['pelican']['topic_page_suffix']) % (
                         self.topic, page_number)
 
         try:
@@ -110,7 +110,7 @@ class TopicEater(object):
 
         if len(links) >= 1:
             for link in links:
-                if re.search(config['helper']['topic_character'],
+                if re.search(self.config['helper']['topic_character'],
                                 link.get('href')):
                     if link.text not in topics:
                         topics.append(link.text)
@@ -155,18 +155,21 @@ class TopicEater(object):
             data_user.topic_weibos.append(data_weibo)
             data_topic.topic_users.append(data_user)
 
-            self.db.add(data_topic)
-            self.db.commit()
+            print data_topic
+
+            #self.db.add(data_topic)
+            #self.db.commit()
 
 
 if __name__ == '__main__':
-    config_path = os.path.join(os.path.dirname(__file__), '../../config.json')
+    onfig_path = os.path.join(os.path.dirname(__file__), '../../config.json')
 
     with open(config_path) as config_file:
         config = json.load(config_file)
         entrance = config['pelican']['topic_entrance']
 
-        test_topic = '#晨间日记#'
+        #test_topic = u'#晨间日记#'
         #test_topic = '#日记#'
+        test_topic = u'#转发视奸#'
         pelican = TopicEater()
         pelican.catch(test_topic)

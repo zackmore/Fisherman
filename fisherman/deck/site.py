@@ -10,6 +10,7 @@ import urllib
 import os.path
 import requests
 import subprocess
+import threading
 
 from bottle import view, run, template, static_file, request
 from bottle import TEMPLATE_PATH
@@ -200,7 +201,6 @@ def bigvs(page=0):
 ################################################
 @get('/fetch/topic/<topic_id:int>')
 def fetch_topic(topic_id):
-    #return {'topic': topic}
     topic = DB.query(Topic).filter_by(id=topic_id).first()
 
     pelican = TopicEater()

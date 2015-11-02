@@ -52,6 +52,7 @@ class TopicEater(object):
                     self.pages = int(input.get('value'))
                     break
                 else:
+                    self.pages = 1
                     continue
 
             # Get weibos_count

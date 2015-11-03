@@ -150,7 +150,7 @@ def bigvs(page=0):
     return dict(followers=rtn['resource'], pagination=rtn['pagination'])
 
 
-# Subprocess
+# Job Queue
 ################################################
 @post('/fetch/topic/<topic_id:int>')
 def fetch_topic(topic_id):

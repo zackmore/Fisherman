@@ -16,6 +16,8 @@
         </li>
         % end
       </ul>
+      % if pagination['pages'] > 1:
       <div class="pagination-number">{{pagination['current']}} / {{pagination['pages']}}</div>
+      % end
     </nav>
 </div>

@@ -9,23 +9,39 @@
   </head>
   <body>
     <header id="header">
-      <h1>Fisherman</h1>
+      <h1>Fisherman | Deck</h1>
     </header>
     <main id="main">
       <aside id="sidebar">
         <nav id="menu">
           <ul>
             <li><a href="/dashboard">首页</a></li>
-            <li><hr></li>
-            <li><a href="/topics">话题</a></li>
-            <li><a href="/topics/users">参与话题的用户</a></li>
-            <li><a href="/topics/weibos">话题的相关微博</a></li>
-            <li><hr></li>
-            <li><a href="/reposts">被转发的微博</a></li>
-            <li><a href="/reposts/users">参与转发的用户</a></li>
-            <li><hr></li>
-            <li><a href="/bigvs">大V</a></li>
-            <li><a href="/bigvs/followers">大V 粉丝</a></li>
+            <li>
+                <strong>Pelicans</strong>
+                <ul>
+                    <li><a href="/topics">话题</a></li>
+                    <li><a href="/topics/users">话题用户</a></li>
+                    <li><a href="/topics/weibos">话题微博</a></li>
+                    <li><hr></li>
+                    <li><a href="/reposts">转发微博</a></li>
+                    <li><a href="/reposts/users">转发用户</a></li>
+                    <li><hr></li>
+                    <li><a href="/bigvs">大 V</a></li>
+                    <li><a href="/bigvs/followers">大 V 粉丝</a></li>
+                </ul>
+            </li>
+            <li>
+                <strong>Pipeline</strong>
+                <ul>
+                    <li></li>
+                </ul>
+            </li>
+            <li>
+                <strong>Settings</strong>
+                <ul>
+                    <li><a href="/settings">Token</a></li>
+                </ul>
+            </li>
           </ul>
         </nav>
       </aside>

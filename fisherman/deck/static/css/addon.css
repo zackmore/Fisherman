@@ -28,3 +28,16 @@
     float: left;
     margin-left: 10px;
 }
+
+hr {
+    margin: 10px 0;
+}
+
+#menu li strong {
+    display: block;
+    margin: 10px 0;
+}
+
+#menu li ul {
+    padding-left: 20px;
+}

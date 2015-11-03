@@ -9,7 +9,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row auto-overflow">
     <div class="col-xs-12">
       <table class="table table-hover">
         <thead>

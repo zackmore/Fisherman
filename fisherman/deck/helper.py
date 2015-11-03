@@ -53,7 +53,7 @@ class Helper(object):
         pass
 
     @staticmethod
-    def _get_resource_query(resource, search_column):
+    def _get_resource_query(resource, search_column, **kwargs):
         search_keyword = request.query.get('keyword')
         if search_keyword:
             search_keyword = request.query.get('keyword').strip().decode('utf-8')
@@ -96,8 +96,9 @@ class Helper(object):
     def generate_listpage_resource(resource,
                                     current_page,
                                     search_column,
-                                    query_url):
-        q = Helper._get_resource_query(resource, search_column)
+                                    query_url,
+                                    **kwargs):
+        q = Helper._get_resource_query(resource, search_column, **kwargs)
         all_count = q.count()
 
         resource = Helper._paginating_query(q, current_page)

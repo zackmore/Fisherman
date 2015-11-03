@@ -9,7 +9,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row auto-overflow">
     <div class="col-xs-12">
       <table class="table table-hover">
         <thead>
@@ -26,8 +26,8 @@
             <tr>
               <td>{{user.id}}</td>
               <td>{{user.weibo_id}}</td>
-              <td>{{user.name}}</td>
-              <td>{{user.link}}</td>
+              <td><a target="_blank" href="{{user.link}}">{{user.name}}</a></td>
+              <td><a target="_blank" href="{{user.link}}">{{user.link}}</a></td>
               <td></td>
             </tr>
           % end

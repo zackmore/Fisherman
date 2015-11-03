@@ -88,6 +88,10 @@ def topics(page=0):
 @route('/topics/users/<page:int>')
 @view('topics/users')
 def topicUsers(page=0):
+    topic_id = request.query.get('topic_id')
+    if topic_id:
+        topic_id = int(topic_id)
+
     rtn = Helper.generate_listpage_resource(TopicUser,
                                             page,
                                             'name',
@@ -161,8 +165,7 @@ def fetch_topic(topic_id):
 # Run Server
 ################################################
 def run_server():
-    #run(host='0.0.0.0', port=8080, debug=True)
-    run(host='0.0.0.0', port=8080)
+    run(host='0.0.0.0', port=8080, debug=True)
 
 
 if __name__ == '__main__':

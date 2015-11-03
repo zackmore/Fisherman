@@ -41,3 +41,23 @@ hr {
 #menu li ul {
     padding-left: 20px;
 }
+
+.auto-overflow {
+    overflow: auto;
+}
+
+.table tr th,
+.table tr td {
+    white-space: nowrap;
+}
+
+.table tr th:last-child,
+.table tr td:last-child {
+    text-align: right;
+}
+
+.table tr th.wrap,
+.table tr td.wrap {
+    white-space: normal;
+    text-align: left;
+}

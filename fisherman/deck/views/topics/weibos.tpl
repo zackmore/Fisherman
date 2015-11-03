@@ -9,20 +9,22 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row auto-overflow">
     <div class="col-xs-12">
       <table class="table table-hover">
         <thead>
           <tr>
             <th>ID</th>
-            <th>内容</th>
+            <th>用户</th>
+            <th class="wrap">内容</th>
           </tr>
         </thead>
         <tbody>
           % for weibo in weibos:
             <tr>
               <td>{{weibo.id}}</td>
-              <td>{{weibo.content}}</td>
+              <td><a class="_blank" href="{{weibo.user.link}}">{{weibo.user.name}}</a></td>
+              <td class="wrap">{{weibo.content}}</td>
             </tr>
           % end
         </tbody>

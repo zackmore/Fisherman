@@ -53,9 +53,6 @@ redis_conn = Redis()
 Q = Queue(connection=redis_conn)
 
 
-
-
-
 # Static Resources
 ################################################
 @route('/static/<filename:path>')
@@ -95,7 +92,8 @@ def topicUsers(page=0):
     rtn = Helper.generate_listpage_resource(TopicUser,
                                             page,
                                             'name',
-                                            '/topics/users')
+                                            '/topics/users',
+                                            topic_id=topic_id)
     return dict(users=rtn['resource'], pagination=rtn['pagination'])
 
 

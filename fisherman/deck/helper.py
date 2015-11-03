@@ -53,13 +53,15 @@ class Helper(object):
         pass
 
     @staticmethod
-    def _get_resource_query(resource, search_column, **kwargs):
+    def _get_resource_query(resource, search_column, kwargs):
         search_keyword = request.query.get('keyword')
         if search_keyword:
             search_keyword = request.query.get('keyword').strip().decode('utf-8')
             q = DB.query(resource).\
                 filter(getattr(resource, search_column).\
                         contains(search_keyword))
+        elif kwargs:
+            q = DB.query(resource).filter_by(**kwargs)
         else:
             q = DB.query(resource)
         return q
@@ -98,7 +100,7 @@ class Helper(object):
                                     search_column,
                                     query_url,
                                     **kwargs):
-        q = Helper._get_resource_query(resource, search_column, **kwargs)
+        q = Helper._get_resource_query(resource, search_column, kwargs)
         all_count = q.count()
 
         resource = Helper._paginating_query(q, current_page)

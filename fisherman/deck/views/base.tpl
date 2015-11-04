@@ -39,7 +39,7 @@
             <li>
                 <strong>Settings</strong>
                 <ul>
-                    <li><a href="/settings">Token</a></li>
+                    <li><a href="/settings/token">Token</a></li>
                 </ul>
             </li>
           </ul>

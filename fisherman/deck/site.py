@@ -15,7 +15,7 @@ import threading
 from rq import Queue
 from redis import Redis
 
-from bottle import view, run, template, static_file, request
+from bottle import view, run, template, static_file, request, redirect
 from bottle import TEMPLATE_PATH
 from bottle import route, post, get
 from sqlalchemy import create_engine
@@ -84,7 +84,7 @@ def topics(page=0):
 @route('/topics/users')
 @route('/topics/users/<page:int>')
 @view('topics/users')
-def topicUsers(page=0):
+def topics_users(page=0):
     topic_id = request.query.get('topic_id')
     if topic_id:
         topic_id = int(topic_id)
@@ -100,7 +100,7 @@ def topicUsers(page=0):
 @route('/topics/weibos')
 @route('/topics/weibos/<page:int>')
 @view('topics/weibos')
-def topicWeibos(page=0):
+def topics_weibos(page=0):
     rtn = Helper.generate_listpage_resource(TopicWeibo,
                                             page,
                                             'content',
@@ -122,7 +122,7 @@ def reposts(page=0):
 @route('/reposts/users')
 @route('/reposts/users/<page:int>')
 @view('reposts/users')
-def repostUsers(page=0):
+def reposts_users(page=0):
     rtn = Helper.generate_listpage_resource(RepostUser,
                                             page,
                                             'name',
@@ -144,12 +144,46 @@ def bigvs(page=0):
 @route('/bigvs/followers')
 @route('/bigvs/followers/<page:int>')
 @view('bigvs/followers')
-def bigvs(page=0):
+def bigvs_followers(page=0):
     rtn = Helper.generate_listpage_resource(BigVFollower,
                                             page,
                                             'name',
                                             '/bigvs/followers')
     return dict(followers=rtn['resource'], pagination=rtn['pagination'])
+
+
+@get('/settings/token')
+@view('settings/token')
+def settings_token_show():
+    config_path = os.path.join(os.path.dirname(__file__),
+                                '../../config.json')
+    with open(config_path) as config_file:
+        config = json.load(config_file)
+        token = config['pelican']['token'][0]
+
+        token_str = []
+        for pair in token.items():
+            token_str.append(pair[0] + ':' + pair[1] + '\n')
+
+        config_file.close()
+        return dict(request_header=''.join(token_str))
+
+
+@post('/settings/token')
+def settings_token_update():
+    new_token = request.forms.get('request-header').split('\r\n')
+    new_token_list = [s for s in new_token if s.strip()]
+    new_token_dict = {}
+    for pair in new_token_list:
+        kv = pair.split(':')
+        new_token_dict[kv[0]] = kv[1]
+    config['pelican']['token'][0] = new_token_dict
+
+    with open(config_path, 'w') as config_file:
+        config_file.write(json.dumps(config))
+        config_file.close()
+
+    redirect('/')
 
 
 # Job Queue

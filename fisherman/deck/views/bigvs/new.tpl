@@ -3,17 +3,17 @@
 <div class="container">
   <div class="row">
     <div class="col-xs-12">
-      <h1 class="pull-left">Token</h1>
+      <h1 class="pull-left">新的大 V 粉丝抓取</h1>
       <div class="pull-right"></div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-xs-10">
+  <div class="row auto-overflow">
+    <div class="col-xs-6">
       <form method="post">
         <div class="form-group">
-          <label for="request-header">Token</label>
+          <label for="weibo-id">大 V Weibo ID</label>
           <br>
-          <textarea id="request-header" name="request-header" class="form-control" style="height: 340px">{{request_header}}</textarea>
+          <input id="weibo-id" name="weibo-id" class="form-control" type="text" placeholder="格式：纯数字的 weibo id" />
         </div>
         <br>
         <br>

@@ -112,6 +112,19 @@ def topics_weibos(page=0):
     return dict(weibos=rtn['resource'], pagination=rtn['pagination'])
 
 
+@get('/topics/new')
+@view('topics/new')
+def topics_new_show():
+    pass
+
+
+@post('/topics/new')
+def topics_new_fetch():
+    new_topic = request.forms.get('topic-name').decode('utf-8')
+    Q.enqueue(worker_pelican, 'topic', new_topic)
+    redirect('/topics')
+
+
 @route('/reposts')
 @route('/reposts/<page:int>')
 @view('reposts/reposts')
@@ -134,6 +147,19 @@ def reposts_users(page=0):
     return dict(users=rtn['resource'], pagination=rtn['pagination'])
 
 
+@get('/reposts/new')
+@view('reposts/new')
+def reposts_new_show():
+    pass
+
+
+@post('/reposts/new')
+def reposts_new_fetch():
+    repost_url = request.forms.get('weibo-url').decode('utf-8')
+    Q.enqueue(worker_pelican, 'repost', repost_url)
+    redirect('/reposts')
+
+
 @route('/bigvs')
 @route('/bigvs/<page:int>')
 @view('bigvs/bigvs')
@@ -154,6 +180,19 @@ def bigvs_followers(page=0):
                                             'name',
                                             '/bigvs/followers')
     return dict(followers=rtn['resource'], pagination=rtn['pagination'])
+
+
+@get('/bigvs/new')
+@view('bigvs/new')
+def bigvs_new_show():
+    pass
+
+
+@post('/bigvs/new')
+def bigvs_new_fetch():
+    weibo_id = request.forms.get('weibo-id').decode('utf-8')
+    Q.enqueue(worker_pelican, 'follower', weibo_id)
+    redirect('/bigvs')
 
 
 @get('/settings/token')
@@ -190,10 +229,8 @@ def settings_token_update():
     redirect('/')
 
 
-# Job Queue
-################################################
 @post('/fetch/topic/<topic_id:int>')
-def fetch_topic(topic_id):
+def topic_fetch(topic_id):
     topic = DB.query(Topic).filter_by(id=topic_id).first()
     Q.enqueue(worker_pelican, 'topic', topic.name)
     return {'result': 1}

@@ -15,19 +15,22 @@
       <aside id="sidebar">
         <nav id="menu">
           <ul>
-            <li><a href="/dashboard">首页</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
             <li>
                 <strong>Pelicans</strong>
                 <ul>
-                    <li><a href="/topics">话题</a></li>
+                    <li><a href="/topics">话题列表</a></li>
                     <li><a href="/topics/users">话题用户</a></li>
                     <li><a href="/topics/weibos">话题微博</a></li>
+                    <li><a href="/topics/new">话题 <span class="label label-success">new</span></a></li>
                     <li><hr></li>
-                    <li><a href="/reposts">转发微博</a></li>
+                    <li><a href="/reposts">转发微博列表</a></li>
                     <li><a href="/reposts/users">转发用户</a></li>
+                    <li><a href="/reposts/new">转发微博 <span class="label label-success">new</span></a></li>
                     <li><hr></li>
-                    <li><a href="/bigvs">大 V</a></li>
+                    <li><a href="/bigvs">大 V 列表</a></li>
                     <li><a href="/bigvs/followers">大 V 粉丝</a></li>
+                    <li><a href="/bigvs/new">大 V <span class="label label-success">new</span></a></li>
                 </ul>
             </li>
             <li>

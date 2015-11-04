@@ -88,12 +88,16 @@ def topics_users(page=0):
     topic_id = request.query.get('topic_id')
     if topic_id:
         topic_id = int(topic_id)
-
-    rtn = Helper.generate_listpage_resource(TopicUser,
-                                            page,
-                                            'name',
-                                            '/topics/users',
-                                            topic_id=topic_id)
+        rtn = Helper.generate_listpage_resource(TopicUser,
+                                                page,
+                                                'name',
+                                                '/topics/users',
+                                                topic_id=topic_id)
+    else:
+        rtn = Helper.generate_listpage_resource(TopicUser,
+                                                page,
+                                                'name',
+                                                '/topics/users')
     return dict(users=rtn['resource'], pagination=rtn['pagination'])
 
 

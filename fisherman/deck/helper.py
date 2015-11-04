@@ -82,15 +82,15 @@ class Helper(object):
         pagination = {}
 
         item_per_page = int(config['deck']['item_per_page'])
-        pagination['pages'] = all_count / item_per_page + 1
-        pagination['current'] = current_page
-        pagination['prev'] = query_url + '/' + str(current_page - 1)
-        pagination['next'] = query_url + '/' + str(current_page + 1)
+        pagination['pages'] = all_count / item_per_page
+        pagination['current'] = current_page if current_page > 0 else 1
+        pagination['prev'] = query_url + '/' + str(pagination['current'] - 1)
+        pagination['next'] = query_url + '/' + str(pagination['current'] + 1)
         pagination['has_prev'] = True
         pagination['has_next'] = True
-        if current_page == 0 or current_page == 1:
+        if current_page == 0 or current_page <= 1:
             pagination['has_prev'] = False
-        if current_page == pagination['pages'] - 1:
+        if current_page >= pagination['pages'] - 1:
             pagination['has_next'] = False
         return pagination
 

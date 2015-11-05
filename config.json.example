@@ -32,5 +32,10 @@
 
     "helper": {
         "topic_character": "100808topic"
+    },
+
+    "log": {
+        "file_path": "/Users/zack/Projects/Fisherman/workers.log",
+        "lines": "100",
     }
 }

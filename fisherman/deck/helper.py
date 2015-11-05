@@ -109,6 +109,30 @@ class Helper(object):
         return dict(resource=resource, pagination=pagination)
 
 
+class WorkerLogger(object):
+    def __init__(self):
+        config_path = os.path.join(os.path.dirname(__file__),
+                                    '../../config.json')
+        with open(config_path) as config_file:
+            config = json.load(config_file)
+            log_file_path = config['log']['file_path']
+
+            self.f = open(log_file_path, 'r+')
+            self.lines = int(config['log']['lines'])
+
+        self.log_tpl = '%(datetime)s\t[%(status)s]\t%(worker)s:\t\t%(info)s\n'
+
+    def log_to_file(log_dict):
+        self.log_tpl.write(self.log_tpl % log_dict)
+
+    def show_to_web():
+        pass
+
+    def clear():
+        pass
+
+
+
 def worker_pelican(pelican_type, entrance):
     if pelican_type == 'topic':
         pelican = TopicEater()

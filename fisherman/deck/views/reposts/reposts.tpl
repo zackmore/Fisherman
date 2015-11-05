@@ -20,17 +20,23 @@
             <th>转发数</th>
             <th>上次抓取时间</th>
             <th>创建于</th>
+            <th>操作</th>
           </tr>
         </thead>
         <tbody>
           % for repost in reposts:
             <tr>
               <td>{{repost.id}}</td>
-              <td>{{repost.base_url}}</td>
-              <td>{{repost.content}}</td>
+              <td>
+                <a href="{{repost.base_url}}" target="_blank">{{repost.base_url}}</a>
+              </td>
+              <td class="wrap">{{repost.content}}</td>
               <td>{{repost.repost_count}}</td>
               <td>{{repost.last_fetched_at}}</td>
               <td>{{repost.created_at}}</td>
+              <td>
+                <a href="/reposts/users?repost_id={{repost.id}}" class="btn btn-xs btn-primary">参与转发用户</a>
+              </td>
             </tr>
           % end
         </tbody>

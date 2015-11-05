@@ -20,6 +20,7 @@
             <th>链接</th>
             <th>创建于</th>
             <th>上次抓取于</th>
+            <th>操作</th>
           </tr>
         </thead>
         <tbody>
@@ -31,6 +32,9 @@
                 <td>{{bigv.link}}</td>
                 <td>{{bigv.created_at}}</td>
                 <td>{{bigv.last_fetched_at}}</td>
+                <td>
+                    <a href="/bigvs/followers?bigv_id={{bigv.id}}" class="btn btn-xs btn-primary">他的粉丝</a>
+                </td>
             </tr>
           % end
         </tbody>

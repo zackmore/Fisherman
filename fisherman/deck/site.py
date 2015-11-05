@@ -105,10 +105,19 @@ def topics_users(page=0):
 @route('/topics/weibos/<page:int>')
 @view('topics/weibos')
 def topics_weibos(page=0):
-    rtn = Helper.generate_listpage_resource(TopicWeibo,
-                                            page,
-                                            'content',
-                                            '/topics/weibos')
+    user_id = request.query.get('user_id')
+    if user_id:
+        user_id = int(user_id)
+        rtn = Helper.generate_listpage_resource(TopicWeibo,
+                                                page,
+                                                'content',
+                                                '/topics/weibos',
+                                                user_id=user_id)
+    else:
+        rtn = Helper.generate_listpage_resource(TopicWeibo,
+                                                page,
+                                                'content',
+                                                '/topics/weibos')
     return dict(weibos=rtn['resource'], pagination=rtn['pagination'])
 
 
@@ -140,10 +149,19 @@ def reposts(page=0):
 @route('/reposts/users/<page:int>')
 @view('reposts/users')
 def reposts_users(page=0):
-    rtn = Helper.generate_listpage_resource(RepostUser,
-                                            page,
-                                            'name',
-                                            '/reposts/users')
+    repost_id = request.query.get('repost_id')
+    if repost_id:
+        repost_id = int(repost_id)
+        rtn = Helper.generate_listpage_resource(RepostUser,
+                                                page,
+                                                'name',
+                                                '/reposts/users',
+                                                repost_id=repost_id)
+    else:
+        rtn = Helper.generate_listpage_resource(RepostUser,
+                                                page,
+                                                'name',
+                                                '/reposts/users')
     return dict(users=rtn['resource'], pagination=rtn['pagination'])
 
 
@@ -175,10 +193,19 @@ def bigvs(page=0):
 @route('/bigvs/followers/<page:int>')
 @view('bigvs/followers')
 def bigvs_followers(page=0):
-    rtn = Helper.generate_listpage_resource(BigVFollower,
-                                            page,
-                                            'name',
-                                            '/bigvs/followers')
+    bigv_id = request.query.get('bigv_id')
+    if bigv_id:
+        bigv_id = int(bigv_id)
+        rtn = Helper.generate_listpage_resource(BigVFollower,
+                                                page,
+                                                'name',
+                                                '/bigvs/followers',
+                                                bigv_id=bigv_id)
+    else:
+        rtn = Helper.generate_listpage_resource(BigVFollower,
+                                                page,
+                                                'name',
+                                                '/bigvs/followers')
     return dict(followers=rtn['resource'], pagination=rtn['pagination'])
 
 

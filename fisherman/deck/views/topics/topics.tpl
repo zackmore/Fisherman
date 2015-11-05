@@ -25,11 +25,11 @@
           % for topic in topics:
             <tr>
               <td>{{topic.id}}</td>
-              <td><a target="_blank" href="http://huati.weibo.com/k/{{topic.name[1:-1]}}">{{topic.name}}</a></td>
+              <td><a target="_blank" href="//huati.weibo.com/k/{{topic.name[1:-1]}}">{{topic.name}}</a></td>
               <td>{{topic.last_fetched_at}}</td>
               <td>{{topic.created_at}}</td>
               <td>
-                <a href="/fetch/topic/{{topic.id}}" class="btn btn-xs btn-primary fetch-topic">Fetch</a>
+                <a href="/fetch/topic/{{topic.id}}" class="btn btn-xs btn-warning fetch-topic">Fetch</a>
                 <a href="/topics/users?topic_id={{topic.id}}" class="btn btn-xs btn-primary">相关用户</a>
               </td>
             </tr>

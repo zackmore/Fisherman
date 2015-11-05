@@ -17,8 +17,8 @@
             <th>ID</th>
             <th>Weibo ID</th>
             <th>名字</th>
-            <th>链接</th>
             <th>创建于</th>
+            <th>操作</th>
           </tr>
         </thead>
         <tbody>
@@ -27,8 +27,8 @@
                 <td>{{follower.id}}</td>
                 <td>{{follower.weibo_id}}</td>
                 <td>{{follower.name}}</td>
-                <td>{{follower.link}}</td>
                 <td>{{follower.created_at}}</td>
+                <td></td>
             </tr>
           % end
         </tbody>

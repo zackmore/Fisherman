@@ -28,7 +28,9 @@
               <td>{{user.weibo_id}}</td>
               <td><a target="_blank" href="{{user.link}}">{{user.name}}</a></td>
               <td><a target="_blank" href="{{user.link}}">{{user.link}}</a></td>
-              <td></td>
+              <td>
+                <a href="/topics/weibos?user_id={{user.id}}" class="btn btn-xs btn-primary">相关微博</a>
+              </td>
             </tr>
           % end
         </tbody>

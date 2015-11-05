@@ -17,9 +17,9 @@
             <th>ID</th>
             <th>Weibo ID</th>
             <th>名字</th>
-            <th>个人微博主页</th>
             <th>来自于</th>
             <th>创建于</th>
+            <th>操作</th>
           </tr>
         </thead>
         <tbody>
@@ -27,10 +27,12 @@
             <tr>
               <td>{{user.id}}</td>
               <td>{{user.weibo_id}}</td>
-              <td>{{user.name}}</td>
-              <td>{{user.link}}</td>
+              <td>
+                <a href="http://weibo.com/u/{{user.weibo_id}}" target="_blank">{{user.name}}</a>
+              </td>
               <td>{{user.agent}}</td>
               <td>{{user.created_at}}</td>
+              <td></td>
             </tr>
           % end
         </tbody>

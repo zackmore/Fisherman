@@ -222,6 +222,18 @@ def bigvs_new_fetch():
     redirect('/bigvs')
 
 
+@get('/im')
+@view('im/im')
+def im_show():
+    weibo_ids_query = request.query.get('weibo_ids')
+    if weibo_ids_query:
+        weibo_ids = weibo_ids_query.decode('utf-8')
+        return dict(weibo_ids=weibo_ids)
+    else:
+        return dict(weibo_ids=None)
+
+
+
 @get('/settings/token')
 @view('settings/token')
 def settings_token_show():

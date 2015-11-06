@@ -36,7 +36,7 @@
             <li>
                 <strong>Pipeline</strong>
                 <ul>
-                    <li></li>
+                    <li><a href="/im">私信</a></li>
                 </ul>
             </li>
             <li>

@@ -46,6 +46,14 @@ hr {
     overflow: auto;
 }
 
+.im {
+    display: none;
+}
+
+.im.show {
+    display: inline-block !important;
+}
+
 .table tr th,
 .table tr td {
     white-space: nowrap;

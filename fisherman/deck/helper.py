@@ -33,6 +33,8 @@ from ..pelican.follower import FollowerEater
 from ..pelican.repost import RepostEater
 from ..pelican.topic import TopicEater
 
+from ..pipeline.im import MessageMachinegun
+
 config_path = os.path.join(os.path.dirname(__file__),
                             '../../config.json')
 with open(config_path) as config_file:
@@ -142,3 +144,7 @@ def worker_pelican(pelican_type, entrance):
         pelican = RepostEater()
 
     pelican.catch(entrance)
+
+def worker_shootup(weibo_id_list, message):
+    machinegun = MessageMachinegun()
+    machinegun.shootup(weibo_id_list, message)

@@ -65,6 +65,13 @@ class MessageMachinegun(object):
             print 'Network Error when send the im'
             sys.exit(1)
 
+        if r:
+            print '%s is down' % weibo_id
+
+    def shootup(self, weibo_id_list, message):
+        for weibo_id in weibo_id_list:
+            self.shoot(weibo_id, message)
+
 
 if __name__ == '__main__':
     machinegun = MessageMachinegun()

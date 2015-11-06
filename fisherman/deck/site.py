@@ -12,13 +12,18 @@ import requests
 import subprocess
 import threading
 
-from rq import Queue
-from redis import Redis
+from rq     import Queue
+from redis  import Redis
 
-from bottle import view, run, template, static_file, request, redirect
-from bottle import TEMPLATE_PATH
-from bottle import route, post, get
-from sqlalchemy import create_engine
+from bottle import  view,\
+                    run,\
+                    template,\
+                    static_file,\
+                    request,\
+                    redirect
+from bottle         import TEMPLATE_PATH
+from bottle         import route, post, get
+from sqlalchemy     import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from ..basket.basket import Topic,\
@@ -30,10 +35,12 @@ from ..basket.basket import Topic,\
                             BigVFollower
 
 from ..pelican.follower import FollowerEater
-from ..pelican.repost import RepostEater
-from ..pelican.topic import TopicEater
+from ..pelican.repost   import RepostEater
+from ..pelican.topic    import TopicEater
 
-from helper import Helper, worker_pelican
+from helper import  Helper,\
+                    worker_pelican,\
+                    worker_shootup
 
 
 # Global Variables, Bottle Settings
@@ -273,6 +280,13 @@ def topic_fetch(topic_id):
     topic = DB.query(Topic).filter_by(id=topic_id).first()
     Q.enqueue(worker_pelican, 'topic', topic.name)
     return {'result': 1}
+
+@post('/pipeline/im')
+def im_handler():
+    weibo_ids_list = request.forms.get('weibo-ids').split(',')
+    im_content = request.forms.get('im-content')
+    Q.enqueue(worker_shootup, weibo_ids_list, im_content)
+    redirect('/topics')
 
 # Run Server
 ################################################

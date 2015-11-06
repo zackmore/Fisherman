@@ -9,20 +9,21 @@
   </div>
   <div class="row auto-overflow">
     <div class="col-xs-6">
-      <form method="post">
+      <form method="post" action="/pipeline/im">
         <div class="form-group">
-          <label for="weibo_ids">Weibo ID</label>
+          <label for="weibo-ids">Weibo ID</label>
           <br>
           % if weibo_ids:
-            <input type="text" placeholder="用逗号分隔多个 weibo ID" name="weibo_ids" class="form-control" value="{{weibo_ids}}" disabled>
+            <input type="text" placeholder="用逗号分隔多个 weibo ID" class="form-control" value="{{weibo_ids}}" disabled>
+            <input type="hidden" value="{{weibo_ids}}" name="weibo-ids">
           % else:
-            <input type="text" placeholder="用逗号分隔多个 weibo ID" name="weibo_ids" class="form-control">
+            <input type="text" placeholder="用逗号分隔多个 weibo ID" name="weibo-ids" class="form-control">
           % end
         </div>
         <div class="form-group">
           <label for="im-content">内容</label>
           <br>
-          <textarea id="im-content" name="content" class="form-control" style="height: 340px"></textarea>
+          <textarea id="im-content" name="im-content" class="form-control" style="height: 340px"></textarea>
         </div>
         <br>
         <br>

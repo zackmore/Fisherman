@@ -26,11 +26,14 @@ with open(config_path) as config_file:
     config = json.load(config_file)
 
 cmd_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../')
+DEVNULL = open(os.devnull, 'wb')
+
 
 def db_reset():
     if os.path.exists(config['basket']['file_path']):
         subprocess.Popen(['rm', config['basket']['file_path']])
     subprocess.Popen(['python', '-m', 'fisherman.basket.basket'], cwd=cmd_path)
+
 
 def rq_clear():
     rq_dashboard_pkl = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'rq_d.pkl')
@@ -55,7 +58,10 @@ def rq_start():
     rq_dashboard_pkl = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'rq_d.pkl')
     rq_dashboard_p = subprocess.Popen(['rq-dashboard',
                                         '-p',
-                                        config['pipeline']['rq_dashboard_port']])
+                                        config['pipeline']['rq_dashboard_port']],
+                                        stdout=DEVNULL,
+                                        stderr=DEVNULL,
+                                        cwd=cmd_path)
     f = open(rq_dashboard_pkl, 'w')
     pickle.dump(rq_dashboard_p, f)
     f.close()
@@ -67,6 +73,7 @@ def rq_start():
     pickle.dump(rq_worker_p, f)
     f.close()
 
+
 def site_clear():
     site_pkl = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'site.pkl')
     if os.path.exists(site_pkl):
@@ -76,9 +83,14 @@ def site_clear():
         f.close()
         subprocess.Popen(['rm', site_pkl])
 
+
 def site_start():
     site_pkl = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'site.pkl')
-    site_p = subprocess.Popen(['python', '-m', 'fisherman.deck.site', '1>/dev/null', '2>&1'], cwd=cmd_path)
+    site_p = subprocess.Popen(['python', '-m', 'fisherman.deck.site'],
+                                cwd=cmd_path,
+                                stdout=DEVNULL,
+                                stderr=DEVNULL,
+                                shell=True)
     f = open(site_pkl, 'w')
     pickle.dump(site_p, f)
     f.close()

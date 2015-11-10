@@ -86,11 +86,12 @@ def site_clear():
 
 def site_start():
     site_pkl = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'site.pkl')
-    site_p = subprocess.Popen(['python', '-m', 'fisherman.deck.site'],
+    site_p = subprocess.Popen(['python',
+                                '-m',
+                                'fisherman.deck.site'],
                                 cwd=cmd_path,
                                 stdout=DEVNULL,
-                                stderr=DEVNULL,
-                                shell=True)
+                                stderr=DEVNULL)
     f = open(site_pkl, 'w')
     pickle.dump(site_p, f)
     f.close()

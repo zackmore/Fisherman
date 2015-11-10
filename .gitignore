@@ -1,5 +1,6 @@
 *.swp
 *.pyc
 
+bin/*.pkl
 config.json
 fisherman/basket/fishes.sqlite3

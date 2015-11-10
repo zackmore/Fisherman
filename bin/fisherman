@@ -1,0 +1,114 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import re
+import sys
+import json
+import time
+import urllib
+import urlparse
+import os
+import os.path
+import datetime
+import argparse
+import subprocess
+import socket
+import pickle
+import pdb
+
+parser = argparse.ArgumentParser()
+parser.add_argument('action', help='Tell the fisherman what to do')
+
+args = parser.parse_args()
+
+config_path = os.path.join(os.path.dirname(__file__), '../config.json')
+with open(config_path) as config_file:
+    config = json.load(config_file)
+
+cmd_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../')
+
+def db_reset():
+    if os.path.exists(config['basket']['file_path']):
+        subprocess.Popen(['rm', config['basket']['file_path']])
+    subprocess.Popen(['python', '-m', 'fisherman.basket.basket'], cwd=cmd_path)
+
+def rq_clear():
+    rq_dashboard_pkl = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'rq_d.pkl')
+    if os.path.exists(rq_dashboard_pkl):
+        f = open(rq_dashboard_pkl, 'r')
+        rq_dashboard_p = pickle.load(f)
+        rq_dashboard_p.kill()
+        f.close()
+        subprocess.Popen(['rm', rq_dashboard_pkl])
+
+    rq_worker_pkl = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'rq_w.pkl')
+    if os.path.exists(rq_worker_pkl):
+        f = open(rq_worker_pkl, 'r')
+        rq_worker_p = pickle.load(f)
+        rq_worker_p.kill()
+        f.close()
+        subprocess.Popen(['rm', rq_worker_pkl])
+
+
+def rq_start():
+    # (re)start rq-dashboard
+    rq_dashboard_pkl = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'rq_d.pkl')
+    rq_dashboard_p = subprocess.Popen(['rq-dashboard',
+                                        '-p',
+                                        config['pipeline']['rq_dashboard_port']])
+    f = open(rq_dashboard_pkl, 'w')
+    pickle.dump(rq_dashboard_p, f)
+    f.close()
+
+    # (re)start rqworker
+    rq_worker_pkl = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'rq_w.pkl')
+    rq_worker_p = subprocess.Popen(['rqworker', '-q'])
+    f = open(rq_worker_pkl, 'w')
+    pickle.dump(rq_worker_p, f)
+    f.close()
+
+def site_clear():
+    site_pkl = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'site.pkl')
+    if os.path.exists(site_pkl):
+        f = open(site_pkl, 'r')
+        site_p = pickle.load(f)
+        site_p.kill()
+        f.close()
+        subprocess.Popen(['rm', site_pkl])
+
+def site_start():
+    site_pkl = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'site.pkl')
+    site_p = subprocess.Popen(['python', '-m', 'fisherman.deck.site', '1>/dev/null', '2>&1'], cwd=cmd_path)
+    f = open(site_pkl, 'w')
+    pickle.dump(site_p, f)
+    f.close()
+
+
+if args.action == 'db:reset':
+    db_reset()
+elif args.action == 'rq:clear':
+    rq_clear()
+elif args.action == 'rq:start':
+    rq_start()
+elif args.action == 'rq:restart':
+    rq_clear()
+    rq_start()
+elif args.action == 'site:clear':
+    site_clear()
+elif args.action == 'site:start':
+    site_start()
+elif args.action == 'site:restart':
+    site_clear()
+    site_start()
+elif args.action == 'all:aboard':
+    db_reset()
+    rq_start()
+    site_start()
+elif args.action == 'all:reboard':
+    db_reset()
+    rq_clear()
+    rq_start()
+    site_clear()
+    site_start()
+else:
+    print 'What should the fisherman do?'

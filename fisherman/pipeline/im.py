@@ -71,6 +71,7 @@ class MessageMachinegun(object):
     def shootup(self, weibo_id_list, message):
         for weibo_id in weibo_id_list:
             self.shoot(weibo_id, message)
+            time.sleep(random.randint(4, 10))
 
 
 if __name__ == '__main__':

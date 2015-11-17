@@ -22,6 +22,20 @@ $(function() {
         var maincheck = $('table.table th input[type="checkbox"]');
         var listchecks = $('table.table td input[type="checkbox"]');
         var imbutton = $('.im.btn');
+        var trs = $('table.table tbody tr');
+
+        trs.on('click', function() {
+            var input = $(this).find('input[type="checkbox"]');
+            if (input.length) {
+                input.prop('checked', !input.prop('checked'));
+
+                if ($('table.table td input:checked').length) {
+                    imbutton.addClass('show');
+                } else {
+                    imbutton.removeClass('show');
+                }
+            }
+        });
 
         maincheck.on('change', function() {
             listchecks.prop('checked', maincheck.prop('checked'));

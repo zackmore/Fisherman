@@ -142,6 +142,9 @@ class FollowerEater(object):
                 follower.weibo_id = re_result.group('uid')
 
                 self.bigv.bigv_followers.append(follower)
+
+                self.db.add(self.bigv)
+                self.db.commit()
         else:
             return False
 
@@ -151,8 +154,6 @@ class FollowerEater(object):
         if self._process_bigv():
             self._process_bigv_followers()
 
-            self.db.add(self.bigv)
-            self.db.commit()
         else:
             print 'Could not get bigv'
             sys.exit(1)
